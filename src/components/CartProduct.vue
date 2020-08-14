@@ -14,6 +14,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.cart-ic-res {
+    position: absolute !important;
+    top: -2px;
+    right: 6px;
+}
 
+.main-cart {
+    padding: 0 20px;
+}
 </style>

@@ -15,7 +15,7 @@
 }
 
 body {
-    font-family: 'Airbnb Cereal App Book';
+    font-family: 'Airbnb Cereal App Book' !important;
 }
 
 .navbar-left {
@@ -25,9 +25,6 @@ body {
     background-color: #fff;
     box-shadow: -5px 1px 5px rgba(0, 0, 0, 0.1);
     padding: 20px 30px 20px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 .content-left {
@@ -57,6 +54,7 @@ body {
 
 .sidebar-item {
     margin-bottom: 30px;
+    color: #444;
 }
 
 .sidebar-item:focus {
@@ -83,9 +81,6 @@ body {
     background-color: #fff;
     box-shadow: 3px 1px 5px rgba(0, 0, 0, 0.15);
     padding: 20px 15px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 .navbar-title {
@@ -93,45 +88,7 @@ body {
     font-size: 20px;
 }
 
-.product {
-    border: 0 !important;
-    background-color: transparent !important;
-}
 
-.action-img {
-    transition: .2s;
-}
-
-.product .action-img:hover {
-    opacity: 0.8;
-}
-
-.product-image {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.product-image img {
-  border-radius: 10px 10px 0 0;
-
-  height: 200px;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.product-image.active::after {
-    content: '';
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 10px 10px 0 0;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
 
 .check-icon {
     position: absolute;
@@ -139,40 +96,9 @@ body {
     display: none;
 }
 
-.product-image.active .check-icon {
-    display: block;
-}
 
-.product-detail {
-    padding: 5px 0 !important;
-}
 
-.product-title {
-    color: #333;
-    margin-bottom: 2px;
-}
 
-.product-title:hover {
-    color: #000;
-}
-
-.product-price {
-    color: #333;
-    font-weight: bold;
-}
-
-.cart-title {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.main-cart {
-    padding: 0 20px;
-    /* position: sticky;
-    top: 100px; */
-}
 
 .chart-empty {
     /* display: none; */
@@ -196,23 +122,23 @@ body {
 }
 
 .btn-one {
-    color: #fff;
-    background-color: #f24f8a;
+    color: #fff !important;
+    background-color: #f24f8a !important;
 }
 
 .btn-one:hover {
-    color: #fff;
-    background-color: #ee5f94;
+    color: #fff !important;
+    background-color: #ee5f94 !important;
 }
 
 .btn-two {
-    color: #fff;
-    background-color: #57cad5;
+    color: #fff !important;
+    background-color: #57cad5 !important;
 }
 
 .btn-two:hover {
-    color: #fff;
-    background-color: #41c5d1;
+    color: #fff !important;
+    background-color: #41c5d1 !important;
 }
 
 .rounded-sm {
@@ -302,50 +228,6 @@ body {
     font-size: 15px !important;
 }
 
-.card-history-detail {
-    margin: 0 0 20px 20px;
-}
-
-.card-history.bg-1 {
-    background: linear-gradient(285.38deg, #FBB2B4 30.05%, rgba(255, 143, 178, 0) 133.19%);
-    box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.card-history.bg-2 {
-    background: linear-gradient(285.38deg, #29DFFF 30.05%, rgba(41, 223, 255, 0) 133.19%);
-    box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.card-history.bg-3 {
-    background: linear-gradient(285.38deg, #AB84C8 30.05%, rgba(241, 201, 236, 0) 133.19%);
-    box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.card-history {
-    font-weight: bold;
-    height: 200px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.card-history .title {
-    font-size: 13px;
-    margin-bottom: 6px;
-}
-
-.card-history .price {
-    font-size: 30px;
-    margin-bottom: 2px;
-}
-
-.card-history .percent {
-    font-size: 13px;
-}
-
 .delete-chart {
     position: absolute;
     left: -10px;
@@ -384,11 +266,7 @@ footer {
     display: none;
 }
 
-.cart-ic-res {
-    position: absolute !important;
-    top: -2px;
-    right: 6px;
-}
+
 
 .modal-dialog.modal-full {
     max-width: 100% !important;
@@ -399,9 +277,17 @@ footer {
     box-shadow: none !important;
 }
 
+#navbar {
+  margin-bottom: 70px;
+}
+
+#navbar-right {
+  left: auto !important;
+}
+
 /* Mobile */
 @media only screen and (max-width:767px) {
-    #content-right {
+    #navbar-right {
         display: none !important;
     }
 
@@ -422,6 +308,11 @@ footer {
     }
 }
 
+@media only screen and (max-width: 767px){
+  #content-right {
+      display: none !important;
+  }
+}
 .sidebar.active {
     display: flex;
 }
@@ -447,4 +338,11 @@ footer {
         padding-right: 1.5rem !important;
 
     }
+}
+
+.cart-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
 }

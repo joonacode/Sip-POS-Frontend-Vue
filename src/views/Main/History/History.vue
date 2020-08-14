@@ -3,8 +3,7 @@
     <b-container fluid>
       <b-row>
         <b-col md="12" class="px-0">
-          <NavbarLeft :history="true" />
-          <div class="content-left pt-4 pr-4 pb-0">
+          <div class="content-left history pt-4 pr-4 pb-0">
             <Sidebar />
             <div class="main-left mb-2">
               <div class="row">
@@ -12,29 +11,24 @@
                   <CardHistory :cardData="cardData" />
                 </div>
                 <div class="col-md-12">
-                  <img class="img-fluid" :src="require(`../assets/images/Chart.png`)" alt="chart" />
+                  <img class="img-fluid" :src="require(`@/assets/images/Chart.png`)" alt="chart" />
                 </div>
                 <HistoryOrder />
               </div>
             </div>
           </div>
         </b-col>
-        <Footer />
       </b-row>
     </b-container>
-    <Modals />
   </div>
 </template>
 
 <script>
-import NavbarLeft from '../components/layout/NavbarLeft'
-import Sidebar from '../components/layout/Sidebar'
-import Footer from '../components/layout/Footer'
-import Modals from '../components/Modals'
-import CardHistory from '../components/CardHistory'
-import HistoryOrder from '../components/HistoryOrder'
+import Sidebar from '@/components/Sidebar'
+import CardHistory from '@/components/CardHistory'
+import HistoryOrder from '@/components/HistoryOrder'
 // @ is an alias to /src
-import '../assets/css/style.css'
+import '@/assets/css/style.css'
 export default {
   name: 'History',
   data () {
@@ -62,10 +56,7 @@ export default {
     }
   },
   components: {
-    NavbarLeft,
     Sidebar,
-    Footer,
-    Modals,
     CardHistory,
     HistoryOrder
   }

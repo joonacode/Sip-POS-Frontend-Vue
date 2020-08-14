@@ -1,7 +1,6 @@
 <template>
-  <div class="col-md-12 mb-5 mt-3">
-    <div class="card shadow-lg rounded-sm">
-      <div class="card-body">
+  <b-col md="12" class="mb-5 mt-3">
+    <b-card class="shadow-lg rounded-sm">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h5 class="font-weight-bold">
             Recent Order
@@ -126,9 +125,8 @@
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-  </div>
+    </b-card>
+  </b-col>
 </template>
 
 <script>
@@ -138,6 +136,6 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
