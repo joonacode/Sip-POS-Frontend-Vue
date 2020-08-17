@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Navbar @clicksearch="getDataSearch" />
-      <router-view :searchInput="dataSearch" />
+    <Navbar />
+    <router-view />
     <Footer />
   </div>
 </template>
@@ -14,22 +14,12 @@ export default {
   components: {
     Navbar,
     Footer
-  },
-  data () {
-    return {
-      dataSearch: ''
-    }
-  },
-  methods: {
-    getDataSearch (val) {
-      this.dataSearch = val
-    }
   }
 }
 </script>
 
 <style scoped>
-  .pr-15 {
-    padding-right: 15px;
-  }
+.pr-15 {
+  padding-right: 15px;
+}
 </style>

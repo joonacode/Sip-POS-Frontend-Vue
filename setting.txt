@@ -1,0 +1,50 @@
+{
+  "editor.minimap.enabled": false,
+  "breadcrumbs.enabled": false,
+  "editor.renderWhitespace": "all",
+  "workbench.activityBar.visible": true,
+  "workbench.statusBar.visible": true,
+  "window.menuBarVisibility": "toggle",
+  "workbench.colorTheme": "Andromeda Bordered",
+  "workbench.iconTheme": "vscode-seedling-icon-theme",
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "window.zoomLevel": 0,
+  "[vue]": {
+    "editor.defaultFormatter": "octref.vetur"
+  },
+  "prettier.vueIndentScriptAndStyle": true,
+  "autoimport.useSemiColon": false,
+  "typescript.format.insertSpaceAfterSemicolonInForStatements": false,
+  "javascript.format.semicolons": "remove",
+  "beautify.ignore": "",
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "editor.formatOnSave": true,
+  "prettier.jsxSingleQuote": true,
+  "vetur.format.defaultFormatterOptions": {
+    "prettier": {
+      "singleQuote": true,
+      "semi": false,
+      "trailingComma": "none",
+      "bracketSpacing": true
+    }
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": ["javascript"],
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "[json]": {
+    
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace"
+  },
+  "prettier.trailingComma": "all",
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "prettier.bracketSpacing": true,
+  "extensions.confirmedUriHandlerExtensionIds": []
+}

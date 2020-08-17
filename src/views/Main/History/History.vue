@@ -7,12 +7,15 @@
             <Sidebar />
             <div class="main-left mb-2">
               <div class="row">
-                <div class="col-lg-4 col-sm-12 mb-3" v-for="(cardData, i) in cardsData" :key="i" :class="i === 2 ? 'col-md-12' : 'col-md-6'">
+                <div
+                  class="col-lg-4 col-sm-12 mb-3"
+                  v-for="(cardData, i) in cardsData"
+                  :key="i"
+                  :class="i === 2 ? 'col-md-12' : 'col-md-6'"
+                >
                   <CardHistory :cardData="cardData" />
                 </div>
-                <div class="col-md-12">
-                  <img class="img-fluid" :src="require(`@/assets/images/Chart.png`)" alt="chart" />
-                </div>
+                <StatisticHistory />
                 <HistoryOrder />
               </div>
             </div>
@@ -27,11 +30,18 @@
 import Sidebar from '@/components/Sidebar'
 import CardHistory from '@/components/CardHistory'
 import HistoryOrder from '@/components/HistoryOrder'
+import StatisticHistory from '@/components/StatisticHistory'
 // @ is an alias to /src
 import '@/assets/css/style.css'
 export default {
   name: 'History',
-  data () {
+  components: {
+    Sidebar,
+    CardHistory,
+    HistoryOrder,
+    StatisticHistory
+  },
+  data() {
     return {
       cardsData: [
         {
@@ -48,18 +58,12 @@ export default {
         },
         {
           bg: 'bg-3',
-          title: 'This Year\'s Income',
+          title: "This Year's Income",
           price: 'Rp. 100.000.000',
           percent: '+10% Yesterday'
         }
       ]
     }
-  },
-  components: {
-    Sidebar,
-    CardHistory,
-    HistoryOrder
   }
 }
-
 </script>

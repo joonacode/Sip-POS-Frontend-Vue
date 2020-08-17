@@ -5,16 +5,24 @@ import History from '../views/Main/History/History.vue'
 import Product from '../views/Main/Product/Product.vue'
 import Category from '../views/Main/Category/Category.vue'
 import Main from '../views/Main/index.vue'
+import Landing from '../views/Landing/index.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+const routes = [ //
+  {
+    path: '/',
+    name: 'Landing',
+    component: Landing
+  },
   {
     path: '/demo',
     name: 'Main',
     component: Main,
-    redirect: { name: 'Home' },
-    children: [
+    redirect: {
+      name: 'Home'
+    },
+    children: [ //
       {
         path: 'home',
         name: 'Home',
