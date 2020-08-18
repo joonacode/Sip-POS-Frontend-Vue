@@ -25,7 +25,7 @@
     </div>
     <div class="name-input">
       <span class="chart-title-product">{{cart.product.name}}</span>
-      {{cart.product.price | currency}}
+      {{cart.product.price | currency}} | {{cart.product.price * cart.qty | currency}}
       <CartInput :qty="cart.qty" :product="cart.product" />
     </div>
   </div>
