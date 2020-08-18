@@ -11,7 +11,7 @@
       </div>
       <p class="mt-2 mb-1">*Belum termasuk ppn</p>
       <b-button
-        @click="$bvModal.show('modal-checkout'); checkout();"
+        @click="checkout"
         class="btn btn-two font-weight-bold py-2 mb-2 btn-block border-0"
       >Checkout</b-button>
       <button @click="clearCart" class="btn btn-one font-weight-bold py-2 btn-block">Cancel</button>
@@ -37,21 +37,25 @@ export default {
     ...mapActions('history', ['postHistory']),
     checkout() {
       // console.log(this.carts)
-      this.saveCartToModal({
-        products: this.carts,
-        price: this.cartTotalPrice
-      })
-      const productName = []
-      this.cartCheckout.products.map((cart) => {
-        return productName.push(cart.product.name)
-      })
-      const dataHistory = {
-        invoice: this.getInvoiceRandom,
-        cashier: 'JoonaG',
-        orders: productName.join(', '),
-        amount: this.cartCheckout.totalPrice
+      const isOk = confirm('Want to checkout ?')
+      if (isOk) {
+        this.saveCartToModal({
+          products: this.carts,
+          price: this.cartTotalPrice
+        })
+        const productName = []
+        this.cartCheckout.products.map((cart) => {
+          return productName.push(cart.product.name)
+        })
+        const dataHistory = {
+          invoice: this.getInvoiceRandom,
+          cashier: 'JoonaG',
+          orders: productName.join(', '),
+          amount: this.cartCheckout.totalPrice
+        }
+        this.postHistory(dataHistory)
+        this.$bvModal.show('modal-checkout')
       }
-      this.postHistory(dataHistory)
     }
   },
   computed: {

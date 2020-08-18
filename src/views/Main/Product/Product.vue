@@ -14,6 +14,9 @@
                     >
                       <h3 class="card-title mb-0">Product</h3>
                       <div>
+                        <b-button @click="refreshProduct" class="mr-2" variant="primary">
+                          <b-icon icon="arrow-clockwise" />
+                        </b-button>
                         <b-button @click="addModal" v-b-modal.modal-1 variant="primary">Add Product</b-button>
                         <router-link :to="{name: 'Category'}" class="btn ml-2 btn-primary">Category</router-link>
                       </div>
@@ -73,6 +76,10 @@ export default {
     updatePage(page = null) {
       this.product.currentPage = page
       this.getProducts({ limit: this.limit, page })
+    },
+    refreshProduct() {
+      this.getProducts({ limit: this.limit, page: 1 })
+      this.product.currentPage = 1
     },
     addModal() {
       this.changeStatusHideModal(false)

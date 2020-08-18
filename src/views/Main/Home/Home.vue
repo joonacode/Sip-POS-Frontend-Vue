@@ -2,13 +2,13 @@
   <div class="home">
     <b-container fluid>
       <b-row>
-        <b-col lg="9" md="8" sm="12" class="px-0">
+        <b-col lg="8" md="8" sm="12" class="px-0">
           <div class="content-left pt-4 pr-4 pb-0">
             <Sidebar />
             <ListProduct />
           </div>
         </b-col>
-        <b-col lg="3" md="4" sm="12" class="px-0" id="content-right">
+        <b-col lg="4" md="4" sm="12" class="px-0" id="content-right">
           <CartList />
         </b-col>
       </b-row>

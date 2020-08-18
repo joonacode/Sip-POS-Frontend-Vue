@@ -14,7 +14,7 @@
         <tr v-for="history in allHistories" :key="history.id">
           <td>#{{history.invoice}}</td>
           <td>{{history.cashier}}</td>
-          <td>{{history.date}}</td>
+          <td>{{formatDate(history.date)}}</td>
           <td>{{history.orders}}</td>
           <td>{{history.amount | currency}}</td>
         </tr>
@@ -27,7 +27,19 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
   name: 'TableHistory',
-  methods: mapActions('history', ['getHistories']),
+  methods: {
+    ...mapActions('history', ['getHistories']),
+    formatDate(param) {
+      const date = new Date(param)
+      const options = {
+        day: 'numeric',
+        month: 'long',
+        weekday: 'long'
+      }
+      const hariIni = date.toLocaleDateString('id-ID', options)
+      return hariIni
+    }
+  },
   mounted() {
     this.getHistories()
   },

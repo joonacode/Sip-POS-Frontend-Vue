@@ -8,7 +8,7 @@
     </div>
     <div class="modal-body">
       <CartEmpty v-if="carts.length < 1" />
-      <div class="main-cart">
+      <div class="main-cart mobile">
         <div class="my-4">
           <CartProduct v-for="cart in carts" :cart="cart" :key="cart.product.id" />
         </div>
@@ -16,11 +16,11 @@
       <div v-if="carts.length > 0" class="checkout py-5">
         <div class="d-flex font-weight-bold justify-content-between">
           <span>Total:</span>
-          <span>Rp. {{cartTotalPrice}}*</span>
+          <span>{{cartTotalPrice | currency}}*</span>
         </div>
         <p class="mt-2 mb-1">*Belum termasuk ppn</p>
         <b-button
-          @click="$bvModal.show('modal-checkout'); checkout();$bvModal.hide('modal-cart-mobile');"
+          @click="checkout"
           class="btn btn-two font-weight-bold py-2 mb-2 btn-block border-0"
         >Checkout</b-button>
         <button @click="clearCart" class="btn btn-one font-weight-bold py-2 btn-block">Cancel</button>
@@ -43,22 +43,27 @@ export default {
     ...mapActions('cart', ['clearCart', 'saveCartToModal']),
     ...mapActions('history', ['postHistory']),
     checkout() {
-      // console.log(this.carts)
-      this.saveCartToModal({
-        products: this.carts,
-        price: this.cartTotalPrice
-      })
-      const productName = []
-      this.cartCheckout.products.map((cart) => {
-        return productName.push(cart.product.name)
-      })
-      const dataHistory = {
-        invoice: Math.random(0, 100).toString().substr(13),
-        cashier: 'JoonaG',
-        orders: productName.join(', '),
-        amount: this.cartCheckout.totalPrice
+      const isOk = confirm('Want to checkout ?')
+      if (isOk) {
+        // console.log(this.carts)
+        this.saveCartToModal({
+          products: this.carts,
+          price: this.cartTotalPrice
+        })
+        const productName = []
+        this.cartCheckout.products.map((cart) => {
+          return productName.push(cart.product.name)
+        })
+        const dataHistory = {
+          invoice: Math.random(0, 100).toString().substr(13),
+          cashier: 'JoonaG',
+          orders: productName.join(', '),
+          amount: this.cartCheckout.totalPrice
+        }
+        this.postHistory(dataHistory)
+        this.$bvModal.show('modal-checkout')
+        this.$bvModal.hide('modal-cart-mobile')
       }
-      this.postHistory(dataHistory)
     }
   },
   computed: {
@@ -68,5 +73,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.main-cart.mobile {
+  max-height: 500px;
+  overflow: scroll;
+  padding: 10px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.main-cart.mobile::-webkit-scrollbar {
+  display: none;
+}
 </style>

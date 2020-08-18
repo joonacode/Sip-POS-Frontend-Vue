@@ -1,11 +1,12 @@
 <template>
   <b-col md="12" v-if="showSearch">
-    <div
-      class="d-flex mb-4 mt-2 justify-content-center"
-      :class="[result ? 'justify-content-between' : '', 'justify-content-center']"
-    >
+    <div class="search-section mb-4 mt-2" :class="[result ? 'active' : '', '']">
       <div>
-        <span v-if="result" class="badge badge-primary p-2 search-result" style="cursor:default">
+        <span
+          v-if="result"
+          class="badge badge-primary mr-2 p-2 search-result"
+          style="cursor:default"
+        >
           Search: {{result}} ({{totalProduct}})
           <a
             @click.prevent="removeResult"
@@ -17,8 +18,16 @@
       <div>
         <form @submit.prevent="searchAction" v-if="showSearch">
           <div class="input-group-append">
-            <input type="text" v-model="name" class="form-control" placeholder="Search product" />
-            <button type="submit" class="btn btn-primary">Search</button>
+            <input
+              type="text"
+              v-model="name"
+              name="search"
+              class="form-control rounded-0"
+              placeholder="Search product"
+            />
+            <button type="submit" class="btn rounded-0 border-0 btn-primary">
+              <b-icon icon="search" font-scale="1"></b-icon>
+            </button>
           </div>
         </form>
       </div>
@@ -44,6 +53,7 @@ export default {
     searchAction() {
       this.getProducts({ search: this.name, limit: 9 })
       this.result = this.name
+      this.$router.push({ query: { search: this.result } })
       this.updateSearchInputText(this.name)
       this.name = ''
     },
@@ -53,9 +63,12 @@ export default {
       this.getProducts({})
       this.updateSearchInputText('')
       this.changeOrdering({ order: 'id', sort: 'desc' })
+      this.$router.push(this.$route.path)
     }
   },
-  computed: mapState('product', ['search', 'showSearch', 'totalProduct'])
+  computed: {
+    ...mapState('product', ['search', 'showSearch', 'totalProduct'])
+  }
 }
 </script>
 
@@ -63,5 +76,29 @@ export default {
 .search-result {
   font-size: 15px !important;
   font-weight: normal;
+}
+.search-inp {
+  border-radius: auto 0 0 auto;
+}
+.btn-inp {
+  border-radius: 0 auto auto 0 !important;
+}
+.search-section {
+  display: flex;
+  justify-content: center;
+}
+
+.search-section.active {
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 450px) {
+  .search-section {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  .search-result {
+    margin-top: 10px;
+  }
 }
 </style>

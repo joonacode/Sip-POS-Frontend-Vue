@@ -1,6 +1,10 @@
 <template>
   <b-card no-body class="product">
-    <a @click.prevent="addToCart({product: detailProduct, qty: 1})" class="action-img">
+    <a
+      @dblclick.prevent="removeProductFromCart(detailProduct.id)"
+      @click.prevent="addToCart({product: detailProduct, qty: 1})"
+      class="action-img"
+    >
       <div
         v-lazy-container="{ selector: 'img' }"
         class="product-image"
@@ -31,7 +35,7 @@ export default {
     CheckIcon
   },
   props: ['detailProduct', 'checkActive'],
-  methods: mapActions('cart', ['addToCart'])
+  methods: mapActions('cart', ['addToCart', 'removeProductFromCart'])
 }
 </script>
 

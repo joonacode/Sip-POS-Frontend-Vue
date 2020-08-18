@@ -6,7 +6,9 @@
           <h5 class="font-weight-bold">Recent Order</h5>
           <select name class="badge badge-secondary rounded-sm outline-focus-none">
             <option value>Month</option>
-            <option value>Yesterday</option>
+            <option value>Week</option>
+            <option value>Day</option>
+            <option value>Year</option>
           </select>
         </div>
         <ChartHistory />

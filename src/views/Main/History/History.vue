@@ -43,6 +43,7 @@ export default {
   },
   data() {
     return {
+      datadata: 90,
       cardsData: [
         {
           bg: 'bg-1',
@@ -53,7 +54,7 @@ export default {
         {
           bg: 'bg-2',
           title: 'Orders',
-          price: '3.270',
+          price: '3.200',
           percent: '+5% Last Week'
         },
         {

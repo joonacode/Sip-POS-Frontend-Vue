@@ -17,7 +17,7 @@ export const ADD_TO_CART = (state, {
   }
   message.toastSuccess('Product added to cart')
 
-  state.carts.push({
+  state.carts.unshift({
     product,
     qty
   })

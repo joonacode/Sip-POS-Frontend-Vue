@@ -3,7 +3,7 @@
     <div class="row" id="navbar">
       <div
         class="px-0 fixed-top"
-        :class="currentRouteName === 'Home' ? 'col-lg-9 col-md-8 col-sm-12' : 'col-md-12'"
+        :class="currentRouteName === 'Home' ? 'col-lg-8 col-md-8 col-sm-12' : 'col-md-12'"
       >
         <div class="navbar-left border-right">
           <button
@@ -61,7 +61,7 @@
         </div>
         <div
           v-if="currentRouteName === 'Home'"
-          class="col-lg-3 col-md-4 col-sm-12 px-0 fixed-top"
+          class="col-lg-4 col-md-4 col-sm-12 px-0 fixed-top"
           id="navbar-right"
         >
           <div class="navbar-right">

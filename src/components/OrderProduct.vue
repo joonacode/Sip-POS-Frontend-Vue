@@ -64,6 +64,7 @@ export default {
   methods: {
     ...mapActions('product', ['getProducts', 'changeOrdering']),
     changeOrder() {
+      this.product.currentPage = 1
       const order = {
         limit: null,
         page: this.currentPage,
@@ -81,7 +82,8 @@ export default {
       'totalPages',
       'searchInputText',
       'ordering'
-    ])
+    ]),
+    ...mapState(['product'])
   }
 }
 </script>

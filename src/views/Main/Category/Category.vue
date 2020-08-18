@@ -14,6 +14,9 @@
                     >
                       <h3 class="card-title mb-0">Category</h3>
                       <div>
+                        <b-button @click="refreshCategory" class="mr-2" variant="primary">
+                          <b-icon icon="arrow-clockwise" />
+                        </b-button>
                         <b-button
                           @click="addModal"
                           v-b-modal.modal-category
@@ -56,6 +59,9 @@ export default {
     ...mapActions('category', ['getCategories']),
     hideModal() {
       this.$refs['modal-product'].hide()
+    },
+    refreshCategory() {
+      this.getCategories()
     },
     addModal() {
       this.changeStatusHideModal(false)
