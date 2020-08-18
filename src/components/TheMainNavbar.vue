@@ -13,7 +13,9 @@
           >
             <img width="25" height="25" src="@/assets/images/menu.png" alt="menu" />
           </button>
-          <div class="navbar-title">Food Items</div>
+          <div
+            class="navbar-title"
+          >{{currentRouteName === 'Home' ? 'Food Items' : currentRouteName}}</div>
           <div>
             <button
               v-if="currentRouteName === 'Home'"
