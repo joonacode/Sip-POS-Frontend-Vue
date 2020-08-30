@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   name: 'CartInput',
   props: ['qty', 'product'],
@@ -36,20 +36,24 @@ export default {
     }
   },
   methods: {
-    ...mapActions('cart', ['minQtyCart', 'plusQtyCart', 'changeTotalQty']),
+    ...mapMutations('cart', [
+      'MIN_QTY_CART',
+      'PLUS_QTY_CART',
+      'CHANGE_TOTAL_QTY'
+    ]),
     minQtyCartComp(product) {
-      this.minQtyCart(product)
+      this.MIN_QTY_CART(product)
       this.totalQty = ''
     },
     plusQtyCartComp(product) {
-      this.plusQtyCart(product)
+      this.PLUS_QTY_CART(product)
       this.totalQty = ''
     },
     changeTotalQtyComp(product) {
       if (this.totalQty < 1) {
         this.totalQty = ''
       }
-      this.changeTotalQty({ product, qty: this.totalQty })
+      this.CHANGE_TOTAL_QTY({ product, qty: this.totalQty })
     }
   }
 }

@@ -24,6 +24,7 @@
               name="search"
               class="form-control rounded-0"
               placeholder="Search product"
+              v-focus
             />
             <button type="submit" class="btn rounded-0 border-0 btn-primary">
               <b-icon icon="search" font-scale="1"></b-icon>
@@ -36,7 +37,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -45,25 +46,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions('product', [
-      'getProducts',
-      'updateSearchInputText',
-      'changeOrdering'
-    ]),
+    ...mapActions('product', ['getProducts', 'changeOrdering']),
+    ...mapMutations('product', ['UPDATE_SEARCH_INPUT_TEXT']),
     searchAction() {
       this.getProducts({ search: this.name, limit: 9 })
       this.result = this.name
-      this.$router.push({ query: { search: this.result } })
-      this.updateSearchInputText(this.name)
+      this.UPDATE_SEARCH_INPUT_TEXT(this.name)
       this.name = ''
     },
     removeResult() {
       this.result = ''
       this.name = ''
       this.getProducts({})
-      this.updateSearchInputText('')
+      this.UPDATE_SEARCH_INPUT_TEXT('')
       this.changeOrdering({ order: 'id', sort: 'desc' })
-      this.$router.push(this.$route.path)
     }
   },
   computed: {

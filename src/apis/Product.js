@@ -1,5 +1,4 @@
 import Api from './Api'
-
 const END_POINT = 'products'
 
 export default {
@@ -8,10 +7,18 @@ export default {
     return Api.get(`${END_POINT}?limit=${limit || 9}&order=${order || 'id'}&sorting=${sorting || 'desc'}&page=${page || 1}${search ? '&search=' + search : ''}`)
   },
   post(data) {
-    return Api.post(END_POINT, data)
+    return Api.post(END_POINT, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   },
   patch(data, id) {
-    return Api.patch(`${END_POINT}/${id}`, data)
+    return Api.patch(`${END_POINT}/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   },
   delete(id) {
     return Api.delete(`${END_POINT}/${id}`)

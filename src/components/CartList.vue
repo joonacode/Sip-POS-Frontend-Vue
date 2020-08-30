@@ -2,7 +2,7 @@
   <div class="main-cart">
     <CartEmpty v-if="carts.length < 1" />
     <div v-if="carts.length > 0" class="list-chart">
-      <CartProduct v-for="cart in carts" :cart="cart" :key="cart.product.id" />
+      <CartItem v-for="cart in carts" :cart="cart" :key="cart.product.id" />
     </div>
     <div v-if="carts.length > 0" class="checkout py-5">
       <div class="d-flex font-weight-bold justify-content-between">
@@ -14,7 +14,7 @@
         @click="checkout"
         class="btn btn-two font-weight-bold py-2 mb-2 btn-block border-0"
       >Checkout</b-button>
-      <button @click="clearCart" class="btn btn-one font-weight-bold py-2 btn-block">Cancel</button>
+      <button @click="CLEAR_CART" class="btn btn-one font-weight-bold py-2 btn-block">Cancel</button>
     </div>
     <ModalCheckout />
   </div>
@@ -22,24 +22,27 @@
 
 <script>
 import CartEmpty from './CartEmpty'
-import CartProduct from './CartProduct'
+import CartItem from './CartItem'
 import ModalCheckout from './ModalCheckout'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'CartList',
   components: {
     CartEmpty,
-    CartProduct,
+    CartItem,
     ModalCheckout
   },
   methods: {
-    ...mapActions('cart', ['clearCart', 'saveCartToModal']),
+    ...mapMutations('cart', [
+      'CLEAR_CART',
+      'SAVE_CART_TO_MODAL',
+      'GENERATE_INVOICE'
+    ]),
     ...mapActions('history', ['postHistory']),
     checkout() {
-      // console.log(this.carts)
       const isOk = confirm('Want to checkout ?')
       if (isOk) {
-        this.saveCartToModal({
+        this.SAVE_CART_TO_MODAL({
           products: this.carts,
           price: this.cartTotalPrice
         })
@@ -47,9 +50,10 @@ export default {
         this.cartCheckout.products.map((cart) => {
           return productName.push(cart.product.name)
         })
+        this.GENERATE_INVOICE()
         const dataHistory = {
-          invoice: this.getInvoiceRandom,
-          cashier: 'JoonaG',
+          invoice: this.invoice,
+          idUser: this.getDetailUser.id,
           orders: productName.join(', '),
           amount: this.cartCheckout.totalPrice
         }
@@ -59,8 +63,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('cart', ['carts', 'cartCheckout']),
-    ...mapGetters('cart', ['cartTotalPrice', 'getInvoiceRandom'])
+    ...mapState('cart', ['carts', 'cartCheckout', 'invoice']),
+    ...mapGetters('cart', ['cartTotalPrice', 'getInvoiceRandom']),
+    ...mapGetters('user', ['getDetailUser'])
   }
 }
 </script>

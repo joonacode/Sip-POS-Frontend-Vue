@@ -2,10 +2,10 @@ import Vue from 'vue'
 
 export default {
   toastError: (param) => {
-    Vue.$toast.error(`<b>Error</b> : ${param}`)
+    Vue.$toast.error(param)
   },
   toastSuccess: (param) => {
-    Vue.$toast.success(`<b>Success</b> : ${param}`)
+    Vue.$toast.success(param)
   }
 
 }

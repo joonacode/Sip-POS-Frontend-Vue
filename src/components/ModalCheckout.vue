@@ -2,7 +2,7 @@
   <b-modal id="modal-checkout" hide-footer hide-header title="Checkout">
     <div class="modal-header border-bottom-0 pb-0">
       <h5 class="modal-title font-weight-bold" id="addMenuLabel">Checkout</h5>
-      <span class="font-weight-bold">Receipt no: #{{getInvoiceRandom}}</span>
+      <span class="font-weight-bold">Receipt no: #{{getInvoice}}</span>
     </div>
     <div class="modal-body pt-2">
       <small class="mb-5 d-inline-block">Cashier: Pevita Pearce</small>
@@ -39,7 +39,7 @@ export default {
   name: 'ModalCategory',
   computed: {
     ...mapState('cart', ['cartCheckout']),
-    ...mapGetters('cart', ['getInvoiceRandom'])
+    ...mapGetters('cart', ['getInvoice'])
   }
 }
 </script>
