@@ -1,19 +1,18 @@
 <template>
   <MainContainer :isHome="true">
-    <ProductList />
+    <ProductHome />
   </MainContainer>
 </template>
 
 <script>
-import ProductList from '@/components/ProductList'
-import MainContainer from '@/components/ui/MainContainer'
-
+import ProductHome from '@/components/organisms/ProductHome'
+import MainContainer from '@/components/organisms/MainContainer'
 // @ is an alias to /src
 import '@/assets/css/style.css'
 export default {
   name: 'Home',
   components: {
-    ProductList,
+    ProductHome,
     MainContainer
   }
 }

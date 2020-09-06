@@ -10,6 +10,7 @@
         <img :src="require(`@/assets/images/fork.png`)" alt="food" />
       </router-link>
       <router-link
+        v-if="roleId === 1 || roleId === 2"
         title="History"
         :to="{name: 'History'}"
         class="sidebar-item"
@@ -18,7 +19,7 @@
         <img :src="require(`@/assets/images/clipboard.png`)" alt="history" />
       </router-link>
       <router-link
-        v-if="getDetailUser.roleId === 1"
+        v-if="roleId === 1"
         title="Product"
         :to="{name: 'Product'}"
         class="sidebar-item"
@@ -27,7 +28,7 @@
         <b-icon icon="box" font-scale="1.5"></b-icon>
       </router-link>
       <router-link
-        v-if="getDetailUser.roleId === 1"
+        v-if="roleId === 1"
         title="Category"
         :to="{name: 'Category'}"
         class="sidebar-item"
@@ -36,13 +37,13 @@
         <img :src="require(`@/assets/images/category.png`)" alt="history" />
       </router-link>
       <router-link
-        v-if="getDetailUser.roleId === 1"
+        v-if="roleId === 1"
         title="Users"
         :to="{name: 'Users'}"
         class="sidebar-item"
         v-active="currentRouteName"
       >
-        <img :src="require(`@/assets/images/users.png`)" alt="history" />
+        <img :src="require(`@/assets/images/users.png`)" alt="users" />
       </router-link>
       <router-link
         title="Profile"
@@ -56,12 +57,15 @@
         <b-icon icon="box-arrow-in-left" scale="1.5" />
       </ButtonLogout>
     </div>
+    <b-modal id="modal-logout" title="Logout">
+      <p class="my-4">Hello from modal!</p>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ButtonLogout from '@/components/ButtonLogout'
+import { mapState } from 'vuex'
+import ButtonLogout from '@/components/molecules/ButtonLogout'
 export default {
   name: 'Sidebar',
   directives: {
@@ -80,7 +84,7 @@ export default {
     currentRouteName() {
       return this.$route.name
     },
-    ...mapGetters('user', ['getDetailUser'])
+    ...mapState('auth', ['roleId'])
   }
 }
 </script>

@@ -3,6 +3,7 @@ import User from '@/apis/User'
 // state
 const state = {
   users: [],
+  members: [],
   modalDataUser: {
     id: '',
     name: '',
@@ -22,6 +23,7 @@ const state = {
 const getters = {
   getDetailUser: (state) => state.user,
   allUsers: (state) => state.users,
+  allMembers: (state) => state.members,
   getRoleId: (state) => state.user.roleId
 }
 
@@ -42,6 +44,29 @@ const actions = {
         })
         resolve(response.data.results)
         commit('SET_USERS', response.data.results)
+      }).catch(err => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        reject(err.response.data)
+      })
+    })
+  },
+
+  getMembers({
+    commit,
+    dispatch
+  }) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      User.member().then(response => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        resolve(response.data.results)
+        commit('SET_MEMBERS', response.data.results)
       }).catch(err => {
         dispatch('changeIsLoading', false, {
           root: true
@@ -207,6 +232,10 @@ const mutations = {
 
   SET_USERS: (state, payload) => {
     state.users = payload
+  },
+
+  SET_MEMBERS: (state, payload) => {
+    state.members = payload
   },
 
   UPDATE_MODAL_DATA_USER: (state, payload) => {

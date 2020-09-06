@@ -6,6 +6,7 @@ const state = {
     products: [],
     totalPrice: 0
   },
+  emailMember: '',
   invoice: ''
 }
 
@@ -80,6 +81,10 @@ const mutations = {
   REMOVE_PRODUCT_FROM_CART: (state, id) => {
     state.carts = state.carts.filter(cart => cart.product.id !== id)
     message.toastSuccess('Product remove from cart')
+  },
+
+  SET_EMAIL_MEMBER: (state, payload) => {
+    state.emailMember = payload
   },
 
   CLEAR_CART: (state) => {

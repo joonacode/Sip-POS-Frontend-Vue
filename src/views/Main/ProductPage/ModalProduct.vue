@@ -6,26 +6,21 @@
     :title="statusModal === 'add' ? 'Add item' : 'Update item'"
   >
     <form @submit.prevent="statusModal === 'add' ? addProduct() : updateProduct()">
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control form-shadow" v-model="product.name" v-focus />
-          <input type="hidden" v-model="product.id" />
-        </div>
-      </div>
+      <input type="hidden" v-model="product.id" />
+      <g-form-group label="Name" refInp="name" :isRow="true" v-model="product.name" />
+      <input type="hidden" v-model="product.image" />
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Image</label>
         <div class="col-sm-10">
-          <b-form-group class="form-shadow mb-0" label-for="file-default">
+          <b-form-group class="mb-0" label-for="file-default">
             <input
               type="file"
-              class="form-control"
+              class="form-control form-shadow"
               id="image"
               ref="image"
               @change="handleFileUpload()"
             />
           </b-form-group>
-          <input type="hidden" v-model="product.image" />
         </div>
       </div>
       <div v-if="statusModal !== 'add'" class="form-group row">
@@ -34,38 +29,34 @@
           <img :src="product.image" width="200" class="img-fluid img-thumbnail" alt="image" />
         </div>
       </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Price</label>
-        <div class="col-sm-10">
-          <input type="number" class="form-control form-shadow" v-model="product.price" />
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Category</label>
-        <div class="col-sm-10">
-          <select name="category" class="form-control form-shadow" v-model="product.category">
-            <option value disabled selected>Category</option>
-            <option
-              v-for="category in allCategories"
-              :selected="category === category.id"
-              :key="category.id"
-              :value="category.id"
-            >{{category.name}}</option>
-          </select>
-        </div>
-      </div>
+      <g-form-group
+        label="Price"
+        type="number"
+        refInp="price"
+        :isRow="true"
+        v-model="product.price"
+      />
+      <g-form-group-select
+        label="Category"
+        refInp="category"
+        :isRow="true"
+        v-model="product.category"
+      >
+        <option value disabled selected>Category</option>
+        <option
+          v-for="category in allCategories"
+          :selected="product.category === category.id"
+          :key="category.id"
+          :value="category.id"
+        >{{category.name}}</option>
+      </g-form-group-select>
       <div class="modal-footer border-top-0">
-        <button
-          type="button"
-          @click="hideModal"
-          class="btn btn-one px-4 rounded-xs"
-          data-dismiss="modal"
-        >Cancel</button>
-        <MainButton
+        <g-button @cus-click="hideModal" cusClass="btn-one px-4 rounded-xs">Cancel</g-button>
+        <g-button
           type="submit"
-          customClass="btn-two px-4 rounded-xs"
           :isLoading="getLoading"
-        >{{statusModal === 'add' ? 'Add' : 'Update'}}</MainButton>
+          cusClass="btn-two px-4 rounded-xs"
+        >{{statusModal === 'add' ? 'Add' : 'Update'}}</g-button>
       </div>
     </form>
     {{statusHideModal ? hideModal() : ''}}
@@ -73,19 +64,17 @@
 </template>
 
 <script>
+import mixins from '@/components/mixins/swal'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import MainButton from '@/components/ui/MainButton'
 
 export default {
   name: 'ModalProduct',
+  mixins: [mixins],
   props: ['limit'],
   data() {
     return {
       fileImage: ''
     }
-  },
-  components: {
-    MainButton
   },
   methods: {
     ...mapActions(['changeStatusHideModal']),
@@ -103,14 +92,10 @@ export default {
       formData.append('idCategory', this.product.category)
       this.postProduct(formData)
         .then((response) => {
-          this.$toast.success('Data successfully added')
-          this.getProducts({
-            limit: this.limit,
-            page: this.currentPage
-          })
+          this.toastSuccess('Data successfully added')
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
         })
@@ -125,14 +110,10 @@ export default {
       formData.append('idCategory', this.product.category)
       this.patchProduct({ data: formData, id: this.product.id })
         .then((response) => {
-          this.$toast.success('Data successfully updated')
-          this.getProducts({
-            limit: this.limit,
-            page: this.currentPage
-          })
+          this.toastSuccess('Data successfully updated')
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
         })
@@ -154,5 +135,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.form-shadow {
+  border: 0;
+  box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
 </style>

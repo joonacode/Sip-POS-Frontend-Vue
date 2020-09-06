@@ -11,5 +11,8 @@ export default {
   },
   refreshToken(data) {
     return Api.post(`${BASE_URL}/refresh-token`, data)
+  },
+  verifyAccount(token) {
+    return Api.post(`${BASE_URL}/verify-account`, token)
   }
 }

@@ -3,12 +3,11 @@
     <div class="main-left mb-5">
       <div class="row">
         <b-col md="12">
-          <b-card no-body class="shadow-sm border-0">
-            <HeaderCard @add-modal="addModal" @refresh-body="refreshUsers" title="Users" />
-            <div class="card-body">
+          <g-card title="Users" @add-modal="addModal" @refresh-body="refreshUsers">
+            <template #cardBody>
               <TableUsers :categories="allCategories" :users="allUsers" />
-            </div>
-          </b-card>
+            </template>
+          </g-card>
         </b-col>
       </div>
     </div>
@@ -18,10 +17,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
-import MainContainer from '@/components/ui/MainContainer'
+import MainContainer from '@/components/organisms/MainContainer'
 import TableUsers from './TableUsers'
 import ModalUsers from './ModalUsers'
-import HeaderCard from '@/components/ui/HeaderCard'
 
 // @ is an alias to /src
 import '@/assets/css/style.css'
@@ -30,8 +28,7 @@ export default {
   components: {
     TableUsers,
     ModalUsers,
-    MainContainer,
-    HeaderCard
+    MainContainer
   },
   methods: {
     ...mapMutations('user', ['UPDATE_MODAL_DATA_USER']),

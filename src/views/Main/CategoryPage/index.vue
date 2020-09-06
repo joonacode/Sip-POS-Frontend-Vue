@@ -3,12 +3,11 @@
     <div class="main-left mb-5">
       <div class="row">
         <b-col md="12">
-          <b-card no-body class="shadow-sm border-0">
-            <HeaderCard @add-modal="addModal" @refresh-body="refreshCategory" title="Category" />
-            <div class="card-body">
+          <g-card @add-modal="addModal" @refresh-body="refreshCategory" title="Category">
+            <template #cardBody>
               <TableCategory :categories="allCategories" />
-            </div>
-          </b-card>
+            </template>
+          </g-card>
         </b-col>
       </div>
     </div>
@@ -18,10 +17,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import MainContainer from '@/components/ui/MainContainer'
+import MainContainer from '@/components/organisms/MainContainer'
 import TableCategory from './TableCategory'
 import ModalCategory from './ModalCategory'
-import HeaderCard from '@/components/ui/HeaderCard'
 
 // @ is an alias to /src
 import '@/assets/css/style.css'
@@ -30,8 +28,7 @@ export default {
   components: {
     TableCategory,
     ModalCategory,
-    MainContainer,
-    HeaderCard
+    MainContainer
   },
   methods: {
     ...mapActions(['changeStatusHideModal', 'changeStatusModal']),

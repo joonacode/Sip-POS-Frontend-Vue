@@ -3,29 +3,11 @@
     <div class="main-left mb-5">
       <div class="row">
         <b-col md="12">
-          <b-card no-body class="shadow-sm border-0">
-            <HeaderCard
-              @add-modal="addModal"
-              @refresh-body="refreshProduct"
-              :limit="limit"
-              title="Product"
-            />
-            <div class="card-body">
-              <TableProduct
-                :products="{allProducts, perPage: limit,total:product.totalProduct, currentPage: product.currentPage}"
-              />
-              <MainPagination
-                :dataPagination="{
-                  perPage: limit,
-                  currentPage: product.currentPage,
-                  totalProduct: product.totalProduct,
-                  pagination: product.pagination,
-                  linkPagination: product.linkPagination
-                }"
-                @clicked="updatePage"
-              />
-            </div>
-          </b-card>
+          <g-card @add-modal="addModal" @refresh-body="refreshProduct" title="Product">
+            <template #cardBody>
+              <TableProduct :products="allProductsNoPaging" />
+            </template>
+          </g-card>
         </b-col>
       </div>
     </div>
@@ -35,21 +17,16 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import MainPagination from '@/components/ui/MainPagination'
 import TableProduct from './TableProduct'
 import ModalProduct from './ModalProduct'
-import HeaderCard from '@/components/ui/HeaderCard'
-import MainContainer from '@/components/ui/MainContainer'
-
+import MainContainer from '@/components/organisms/MainContainer'
 // @ is an alias to /src
 import '@/assets/css/style.css'
 export default {
   name: 'Product',
   components: {
     TableProduct,
-    MainPagination,
     ModalProduct,
-    HeaderCard,
     MainContainer
   },
   data() {
@@ -60,14 +37,12 @@ export default {
   },
   methods: {
     ...mapActions(['changeStatusHideModal', 'changeStatusModal']),
-    ...mapActions('product', ['getProducts', 'changeModalTitle']),
+    ...mapActions('product', ['getProductsNoPaging', 'changeModalTitle']),
     updatePage(page = null) {
-      this.product.currentPage = page
-      this.getProducts({ limit: this.limit, page })
+      this.getProductsNoPaging()
     },
     refreshProduct() {
-      this.getProducts({ limit: this.limit, page: 1 })
-      this.product.currentPage = 1
+      this.getProductsNoPaging()
     },
     addModal() {
       this.changeStatusHideModal(false)
@@ -78,13 +53,12 @@ export default {
       this.product.product.category = ''
     }
   },
-  mounted() {
-    this.product.currentPage = 1
-    this.getProducts({ limit: this.limit })
+  created() {
+    this.getProductsNoPaging()
   },
   computed: {
     ...mapState(['product']),
-    ...mapGetters('product', ['allProducts'])
+    ...mapGetters('product', ['allProductsNoPaging'])
   }
 }
 </script>

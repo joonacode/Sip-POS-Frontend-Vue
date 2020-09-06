@@ -31,7 +31,7 @@
             <a class="nav-link" href="#contact">Kontak</a>
           </li>
           <li class="nav-item">
-            <a class="ml-2 px-3 btn btn-primary shadow" href="#">Buy Now</a>
+            <a class="ml-2 px-3 btn btn-primary shadow" href="#pricing">Download</a>
           </li>
         </ul>
       </div>

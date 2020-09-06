@@ -23,7 +23,11 @@ export default {
   created() {
     this.interceptorsRequest()
     this.interceptorsResponse()
-    const id = localStorage.getItem('id') || null
+    const idUser = this.$CryptoJS.AES.decrypt(
+      localStorage.getItem('data-time'),
+      process.env.VUE_APP_SECRET_KEY
+    ).toString(this.$CryptoJS.enc.Utf8)
+    const id = idUser || null
     this.detailUser(id)
   }
 }

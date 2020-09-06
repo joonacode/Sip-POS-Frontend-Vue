@@ -6,6 +6,9 @@ export default {
   all(limit = null, page = null, order = null, sorting = null, search = null) {
     return Api.get(`${END_POINT}?limit=${limit || 9}&order=${order || 'id'}&sorting=${sorting || 'desc'}&page=${page || 1}${search ? '&search=' + search : ''}`)
   },
+  allNoPaging() {
+    return Api.get(`${END_POINT}/no-paging`)
+  },
   post(data) {
     return Api.post(END_POINT, data, {
       headers: {

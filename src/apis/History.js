@@ -10,6 +10,12 @@ export default {
   post(data) {
     return Api.post(END_POINT, data)
   },
+  myHistory(id) {
+    return Api.get(`${END_POINT}/my-history/${id}`)
+  },
+  sendReceipt(data) {
+    return Api.post(`${END_POINT}/send-email-receipt`, data)
+  },
   patch(data, id) {
     return Api.patch(`${END_POINT}/${id}`, data)
   },

@@ -1,48 +1,48 @@
 <template>
-  <AuthCard>
-    <template #header>Login</template>
-    <template #form>
-      <form @submit.prevent="login">
-        <div class="form-group">
-          <input
-            type="text"
-            @keyup="checkEmail"
-            :class="[email.length > 2 ? statusEmail : '']"
-            placeholder="Email"
-            class="form-control"
-            v-model="email"
-          />
-          <div class="invalid-feedback">{{messageEmail}}</div>
-        </div>
-        <div class="form-group">
-          <input type="password" placeholder="Password" class="form-control" v-model="password" />
-        </div>
-        <MainButton
-          :disabled="checkSubmit"
-          type="sumbit"
-          :isLoading="getLoading"
-          variant="primary"
-        >Login</MainButton>
-      </form>
-    </template>
-    <template #footer>
+  <div class="col-md-7 my-5" style="padding: 60px 60px 60px;">
+    <h2 class="mb-3 font-weight-bold text-dark">
+      Login
+      <b-icon icon="shield-lock-fill" />
+    </h2>
+    <small class="mb-4 d-inline-block">Welcome please login to your account</small>
+    <form @submit.prevent="login">
+      <div class="form-group">
+        <label for>Email</label>
+        <input
+          type="text"
+          @keyup="checkEmail"
+          :class="[email.length > 2 ? statusEmail : '']"
+          class="form-control"
+          v-model="email"
+        />
+        <div class="invalid-feedback">{{messageEmail}}</div>
+      </div>
+      <div class="form-group">
+        <label for>Password</label>
+        <input type="password" class="form-control" v-model="password" />
+      </div>
+      <g-button
+        :disabled="checkSubmit"
+        type="sumbit"
+        :isLoading="getLoading"
+        variant="secondary"
+        cusClass="btn-block my-3 shadow"
+      >Login</g-button>
+    </form>
+    <span>
       {{lihatStatus ? clearRedirect() : ''}}
       No have account?
       <router-link :to="{name: 'Register'}">register here</router-link>
-    </template>
-  </AuthCard>
+    </span>
+  </div>
 </template>
 
 <script>
+import mixins from '@/components/mixins/swal'
 import { mapActions, mapGetters } from 'vuex'
-import AuthCard from '@/components/AuthCard'
-import MainButton from '@/components/ui/MainButton'
 export default {
   name: 'Login',
-  components: {
-    AuthCard,
-    MainButton
-  },
+  mixins: [mixins],
   data() {
     return {
       email: '',
@@ -80,10 +80,10 @@ export default {
       this.loginUser(dataLogin)
         .then((response) => {
           this.$router.push({ name: 'Home' })
-          this.$toast.success('Login success')
+          this.toastSuccess('Login succes')
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
           this.password = ''
@@ -105,6 +105,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

@@ -6,10 +6,14 @@
           <div class="content-left history pt-4 pr-4 pb-0">
             <Sidebar />
             <div class="main-left mb-2">
-              <HistoryInfoList />
+              <ListInfoHistory />
               <div class="row">
-                <HistoryChartCard />
-                <HistoryOrderCard />
+                <div class="col-md-12 my-4">
+                  <ChartCard />
+                </div>
+                <div class="col-md-12 mb-5 mt-3">
+                  <OrderCard />
+                </div>
               </div>
             </div>
           </div>
@@ -20,19 +24,19 @@
 </template>
 
 <script>
-import HistoryInfoList from '@/components/HistoryInfoList'
+import ListInfoHistory from '@/components/molecules/ListInfoHistory'
 import Sidebar from '@/components/layout/MainSidebar'
-import HistoryOrderCard from '@/components/HistoryOrderCard'
-import HistoryChartCard from '@/components/HistoryChartCard'
+import OrderCard from '@/components/organisms/OrderCard'
+import ChartCard from '@/components/organisms/ChartCard'
 // @ is an alias to /src
 import '@/assets/css/style.css'
 export default {
   name: 'History',
   components: {
     Sidebar,
-    HistoryOrderCard,
-    HistoryChartCard,
-    HistoryInfoList
+    OrderCard,
+    ChartCard,
+    ListInfoHistory
   },
   data() {
     return {

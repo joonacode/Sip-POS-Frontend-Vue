@@ -3,6 +3,7 @@ import Product from '@/apis/Product'
 // State
 const state = () => ({
   products: [],
+  productsNoPaging: [],
   product: {
     name: '',
     image: '',
@@ -27,6 +28,9 @@ const state = () => ({
 const getters = {
   allProducts: (state) => {
     return state.products
+  },
+  allProductsNoPaging: (state) => {
+    return state.productsNoPaging
   }
 }
 
@@ -60,6 +64,28 @@ const actions = {
       })
   },
 
+  getProductsNoPaging({
+    commit,
+    dispatch
+  }) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    Product.allNoPaging()
+      .then(response => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        commit('SET_PRODUCTS_NO_PAGING', response.data)
+      })
+      .catch(err => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        commit('SET_PRODUCTS_NO_PAGING', err.response.data)
+      })
+  },
+
   postProduct({
     commit,
     dispatch
@@ -76,6 +102,8 @@ const actions = {
           dispatch('changeIsLoading', false, {
             root: true
           })
+          dispatch('getProductsNoPaging')
+
           resolve(response.data)
         })
         .catch(err => {
@@ -106,6 +134,7 @@ const actions = {
           dispatch('changeStatusHideModal', true, {
             root: true
           })
+          dispatch('getProductsNoPaging')
           resolve(response.data)
         })
         .catch(err => {
@@ -129,10 +158,7 @@ const actions = {
         dispatch('changeIsLoading', false, {
           root: true
         })
-        dispatch('getProducts', {
-          limit: 10,
-          page: 1
-        })
+        dispatch('getProductsNoPaging')
         resolve(response.data)
       }).catch(err => {
         dispatch('changeIsLoading', false, {
@@ -164,6 +190,14 @@ const mutations = {
         totalPages: data.total_pages
       }
       state.linkPagination = data._links
+    }
+  },
+
+  SET_PRODUCTS_NO_PAGING: (state, data) => {
+    if (data.error) {
+      state.productsNoPaging = []
+    } else {
+      state.productsNoPaging = data.results
     }
   },
 

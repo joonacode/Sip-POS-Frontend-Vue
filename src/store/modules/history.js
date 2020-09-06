@@ -1,9 +1,9 @@
 import History from '@/apis/History'
-import message from './helper/message'
 
 // state
 const state = {
   histories: [],
+  myHistories: [],
   historiesBc: [],
   incomeToday: '',
   incomeYesterday: '',
@@ -88,9 +88,8 @@ yesterdayx.setDate(yesterdayx.getDate() - 1)
 const getYesterday = yesterdayx.toLocaleDateString('id-ID', dateFormat)
 
 const getters = {
-  allHistories: (state) => {
-    return state.histories
-  },
+  allHistories: (state) => state.histories,
+  allMyHistories: (state) => state.myHistories,
   getIncomeToday: (state) => state.incomeToday,
   getIncomeYesterday: (state) => state.incomeYesterday,
   getThisYearIncome: (state) => state.thisYearIncome,
@@ -119,13 +118,76 @@ const actions = {
     })
   },
 
+  getMyHistories({
+    commit,
+    dispatch
+  }, id) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    History.myHistory(id).then(response => {
+      commit('SET_MY_HISTORIES', response.data.results)
+      dispatch('changeIsLoading', false, {
+        root: true
+      })
+    })
+  },
+
   postHistory({
-    commit
+    commit,
+    dispatch
   }, data) {
-    History.post(data).then(response => {
-      commit('ADD_HISTORY', response.data.results)
-    }).catch(err => {
-      commit('ADD_HISTORY', err.response.data)
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      History.post(data).then(response => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        resolve(response.data)
+      }).catch(err => {
+        reject(err.response.data)
+      })
+    })
+  },
+
+  deleteHistory({
+    commit,
+    dispatch
+  }, id) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      History.delete(id).then(response => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        dispatch('getHistories')
+        resolve(response.data)
+      }).catch(err => {
+        reject(err.response.data)
+      })
+    })
+  },
+
+  sendReceipt({
+    commit,
+    dispatch
+  }, data) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      History.sendReceipt(data).then(response => {
+        dispatch('changeIsLoading', false, {
+          root: true
+        })
+        resolve(response.data)
+      }).catch(err => {
+        reject(err.response.data)
+      })
     })
   },
 
@@ -151,27 +213,37 @@ const mutations = {
   SET_HISTORIES: (state, histories) => {
     const newHistories = histories.map(history => {
       return {
-        history: history.amount,
-        cashier: history.cashier,
+        ...history,
         date: new Date(history.date).toLocaleDateString('id-ID', dateFormat),
         dateJs: new Date(history.date),
         year: new Date(history.date).getFullYear(),
-        month: new Date(history.date).getMonth() + 1,
-        id: history.id,
-        invoice: history.invoice,
-        orders: history.orders,
-        amount: history.amount
-
+        month: new Date(history.date).getMonth() + 1
       }
     })
 
     state.histories = newHistories
     state.historiesBc = newHistories
-    state.incomeToday = newHistories.filter(history => history.date === todayGlobal).map(val => Number(val.amount)).reduce((a, b) => a + b)
-    state.incomeYesterday = newHistories.filter(history => history.date === getYesterday).map(val => Number(val.amount)).reduce((a, b) => a + b)
+    const checkTodakIncome = newHistories.filter(history => history.date === todayGlobal)
+    const checkYesterdayIncome = newHistories.filter(history => history.date === getYesterday)
+    const checkYearIncome = newHistories.filter(history => history.year === new Date().getFullYear())
+    if (checkTodakIncome.length < 1) {
+      state.incomeToday = 0
+    } else {
+      state.incomeToday = newHistories.filter(history => history.date === todayGlobal).map(val => Number(val.amount)).reduce((a, b) => a + b)
+    }
+    if (checkYesterdayIncome.length < 1) {
+      state.incomeYesterday = 0
+    } else {
+      state.incomeYesterday = newHistories.filter(history => history.date === getYesterday).map(val => Number(val.amount)).reduce((a, b) => a + b)
+    }
+    if (checkYearIncome.length < 1) {
+      state.thisYearIncome = 0
+    } else {
+      state.thisYearIncome = newHistories.filter(history => history.year === new Date().getFullYear()).map(val => Number(val.amount)).reduce((a, b) => a + b)
+    }
+
     state.ordersToday = newHistories.filter(history => history.date === todayGlobal).length
     state.ordersYesterday = newHistories.filter(history => history.date === getYesterday).length
-    state.thisYearIncome = newHistories.filter(history => history.year === new Date().getFullYear()).map(val => Number(val.amount)).reduce((a, b) => a + b)
     state.monthChart.map((monthItem) => {
       monthItem.value = 0
     })
@@ -207,12 +279,18 @@ const mutations = {
     ])
   },
 
-  ADD_HISTORY: (state, data) => {
-    if (data.error) {
-      message.toastError(data.error.sqlMessage ? data.error.sqlMessage : data.error.join(', '))
-    } else {
-      message.toastSuccess('Transaction success')
-    }
+  SET_MY_HISTORIES: (state, histories) => {
+    const newHistories = histories.map(history => {
+      return {
+        ...history,
+        date: new Date(history.date).toLocaleDateString('id-ID', dateFormat),
+        dateJs: new Date(history.date),
+        year: new Date(history.date).getFullYear(),
+        month: new Date(history.date).getMonth() + 1
+      }
+    })
+
+    state.myHistories = newHistories
   },
 
   FILTER_HISTORY: (state, payload) => {

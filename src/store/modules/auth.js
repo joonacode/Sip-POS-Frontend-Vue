@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable space-before-function-paren */
 import Vue from 'vue'
@@ -7,10 +9,10 @@ import router from '@/router'
 
 // state
 const state = {
-  idUser: localStorage.getItem('id') || null,
-  roleId: localStorage.getItem('roleId') || null,
   token: localStorage.getItem('token') || null,
-  refreshToken: localStorage.getItem('refreshToken') || null
+  refreshToken: localStorage.getItem('refreshToken') || null,
+  idUser: localStorage.getItem('idUser') || null,
+  roleId: localStorage.getItem('roleId') || null
 }
 
 // getters
@@ -30,17 +32,19 @@ const actions = {
       root: true
     })
     return new Promise((resolve, reject) => {
-      Auth.register(dataRegistration).then(response => {
-        dispatch('changeIsLoading', false, {
-          root: true
+      Auth.register(dataRegistration)
+        .then(response => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          resolve(response.data.results)
         })
-        resolve(response.data.results)
-      }).catch(err => {
-        dispatch('changeIsLoading', false, {
-          root: true
+        .catch(err => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          reject(err.response.data)
         })
-        reject(err.response.data)
-      })
     })
   },
 
@@ -52,18 +56,44 @@ const actions = {
       root: true
     })
     return new Promise((resolve, reject) => {
-      Auth.login(dataLogin).then(response => {
-        dispatch('changeIsLoading', false, {
-          root: true
+      Auth.login(dataLogin)
+        .then(response => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          commit('LOGIN_USER', response.data)
+          resolve(response.data.results)
         })
-        commit('LOGIN_USER', response.data)
-        resolve(response.data.results)
-      }).catch(err => {
-        dispatch('changeIsLoading', false, {
-          root: true
+        .catch(err => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          reject(err.response.data)
         })
-        reject(err.response.data)
-      })
+    })
+  },
+
+  verifyAccount({
+    commit,
+    dispatch
+  }, token) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      Auth.verifyAccount(token)
+        .then(response => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          resolve(response.data)
+        })
+        .catch(err => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          reject(err.response.data)
+        })
     })
   },
 
@@ -74,14 +104,27 @@ const actions = {
   },
 
   interceptorsRequest({
-    state
+    state,
+    dispatch
   }) {
     Api.interceptors.request.use(
       function (config) {
+        if (localStorage.getItem('data-time') && localStorage.getItem('data-hour')) {
+          const idUser = Vue.CryptoJS.AES.decrypt(localStorage.getItem('data-time'), process.env.VUE_APP_SECRET_KEY).toString(Vue.CryptoJS.enc.Utf8)
+          const roleId = Vue.CryptoJS.AES.decrypt(localStorage.getItem('data-hour'), process.env.VUE_APP_SECRET_KEY).toString(Vue.CryptoJS.enc.Utf8)
+          if (!roleId || !idUser) {
+            dispatch('logoutUser')
+          }
+          state.idUser = idUser
+          state.roleId = Number(roleId)
+        } else if (!localStorage.getItem('data-time') || !localStorage.getItem('data-hour')) {
+          dispatch('logoutUser')
+        }
         config.headers.Authorization = `Bearer ${state.token}`
         return config
       },
       function (error) {
+        console.log(error)
         return Promise.reject(error)
       }
     )
@@ -100,7 +143,6 @@ const actions = {
       const {
         error,
         status_code
-
       } = err.response.data
       if (error === 'Token invalid' && status_code === 401) {
         commit('LOGOUT_USER')
@@ -114,17 +156,25 @@ const actions = {
           roleId: Number(state.roleId),
           refreshToken: state.refreshToken
         }
-        Auth.refreshToken(tokenUser).then(response => {
-          const {
-            token,
-            refreshToken
-          } = response.data.results
-          localStorage.setItem('token', token)
-          localStorage.setItem('refreshToken', refreshToken)
-          dispatch('interceptorsRequest')
-        }).catch(err => {
-          console.log(err.response)
-        })
+        Auth.refreshToken(tokenUser)
+          .then(response => {
+            const {
+              token,
+              refreshToken
+            } = response.data.results
+            state.token = token
+            state.refreshToken = refreshToken
+            localStorage.setItem('token', token)
+            localStorage.setItem('refreshToken', refreshToken)
+            dispatch('interceptorsRequest')
+          })
+        dispatch('interceptorsRequest')
+        Vue.$toast.error('Your session is expired refresh the browser or navigate to another page for update the session', {
+            duration: 5000
+          })
+          .catch(err => {
+            console.log(err.response)
+          })
       } else if (error === 'Only admins can access' && status_code === 403) {
         Vue.$toast.error('Opps... You not have permission!')
         router.push({
@@ -134,11 +184,10 @@ const actions = {
       return Promise.reject(err)
     })
   }
-
 }
 // mutations
-const mutations = {
 
+const mutations = {
   LOGIN_USER: (state, data) => {
     const {
       token,
@@ -146,24 +195,26 @@ const mutations = {
       id,
       roleId
     } = data.results
+    const encryptedId = Vue.CryptoJS.AES.encrypt(id.toString(), process.env.VUE_APP_SECRET_KEY).toString()
+    const encryptedRoleId = Vue.CryptoJS.AES.encrypt(roleId.toString(), process.env.VUE_APP_SECRET_KEY).toString()
+
     localStorage.setItem('token', token)
     localStorage.setItem('refreshToken', refreshToken)
-    localStorage.setItem('id', id)
-    localStorage.setItem('roleId', roleId)
+    localStorage.setItem('data-time', encryptedId)
+    localStorage.setItem('data-hour', encryptedRoleId)
     state.idUser = id
     state.token = token
     state.roleId = roleId
     state.refreshToken = refreshToken
   },
 
-  LOGOUT_USER: (state) => {
+  LOGOUT_USER: state => {
     localStorage.clear()
     state.idUser = {}
     state.token = null
     state.roleId = null
     state.refreshToken = null
   }
-
 }
 
 export default {

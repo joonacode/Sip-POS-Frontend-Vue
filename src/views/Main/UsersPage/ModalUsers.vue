@@ -6,77 +6,67 @@
     :title="statusModal === 'add' ? 'Add user' : 'Update user'"
   >
     <form @submit.prevent="statusModal === 'add' ? addUser() : updateUser()">
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control form-shadow" v-model="modalDataUser.name" />
-          <input type="hidden" v-model="modalDataUser.id" />
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control form-shadow" v-model="modalDataUser.email" />
-          <input type="hidden" v-model="modalDataUser.oldEmail" />
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Gender</label>
-        <div class="col-sm-10">
-          <select class="form-control form-shadow" v-model="modalDataUser.gender">
-            <option value disabled selected>Select Gender</option>
-            <option
-              v-for="(gender, i) in genders"
-              :selected="modalDataUser.gender === gender.val"
-              :value="gender.val"
-              :key="i"
-            >{{gender.name}}</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Role</label>
-        <div class="col-sm-10">
-          <select class="form-control form-shadow" v-model="modalDataUser.roleId">
-            <option value selected disabled>Select Role</option>
-            <option
-              v-for="(role, i) in roles"
-              :selected="modalDataUser.roleId === role.val"
-              :value="role.val"
-              :key="i"
-            >{{role.name}}</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Status</label>
-        <div class="col-sm-10">
-          <select class="form-control form-shadow" v-model="modalDataUser.status">
-            <option value selected disabled>Select Status</option>
-            <option value="1" :selected="modalDataUser.status === 1">Active</option>
-            <option value="0" :selected="modalDataUser.status === 0">Disable</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group row" v-if="statusModal === 'add'">
-        <label class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
-          <input type="password" class="form-control form-shadow" v-model="password" />
-        </div>
-      </div>
-      <div class="form-group row" v-if="statusModal === 'add'">
-        <label class="col-sm-2 col-form-label">Verify Password</label>
-        <div class="col-sm-10">
-          <input type="password" class="form-control form-shadow" v-model="passwordVerification" />
-        </div>
-      </div>
+      <input type="hidden" v-model="modalDataUser.id" />
+      <input type="hidden" v-model="modalDataUser.oldEmail" />
+      <g-form-group label="Name" refInp="name" :isRow="true" v-model="modalDataUser.name" />
+      <g-form-group label="Email" refInp="email" :isRow="true" v-model="modalDataUser.email" />
+      <g-form-group-select
+        label="Gender"
+        refInp="gender"
+        :isRow="true"
+        v-model="modalDataUser.gender"
+      >
+        <option value disabled selected>Select Gender</option>
+        <option
+          v-for="(gender, i) in genders"
+          :selected="modalDataUser.gender === gender.val"
+          :value="gender.val"
+          :key="i"
+        >{{gender.name}}</option>
+      </g-form-group-select>
+      <g-form-group-select label="Role" refInp="role" :isRow="true" v-model="modalDataUser.roleId">
+        <option value selected disabled>Select Role</option>
+        <option
+          v-for="(role, i) in roles"
+          :selected="modalDataUser.roleId === Number(role.val)"
+          :value="role.val"
+          :key="i"
+        >{{role.name}}</option>
+      </g-form-group-select>
+      <g-form-group-select
+        label="Status"
+        refInp="status"
+        :isRow="true"
+        v-model="modalDataUser.status"
+      >
+        <option value selected disabled>Select Status</option>
+        <option value="1" :selected="modalDataUser.status === 1">Active</option>
+        <option value="2" :selected="modalDataUser.status === 2">Non Active</option>
+        <option value="0" :selected="modalDataUser.status === 0">Disable</option>
+      </g-form-group-select>
+      <g-form-group
+        type="password"
+        v-if="statusModal === 'add'"
+        label="Password"
+        refInp="password"
+        :isRow="true"
+        v-model="password"
+      />
+      <g-form-group
+        type="password"
+        v-if="statusModal === 'add'"
+        label="Verify Password"
+        refInp="verifyPassword"
+        :isRow="true"
+        v-model="passwordVerification"
+      />
       <div class="form-group row" v-if="statusModal !== 'add'">
         <label class="col-sm-2 col-form-label">Image</label>
         <div class="col-sm-10">
-          <b-form-group class="form-shadow mb-0" label-for="file-default">
+          <b-form-group class="mb-0" label-for="file-default">
             <input
               type="file"
-              class="form-control"
+              class="form-control form-shadow"
               id="image"
               ref="image"
               @change="handleFileUpload()"
@@ -101,11 +91,11 @@
           class="btn btn-one px-4 rounded-xs"
           data-dismiss="modal"
         >Cancel</button>
-        <MainButton
+        <g-button
           type="submit"
-          customClass="btn-two px-4 rounded-xs"
+          cusClass="btn-two px-4 rounded-xs"
           :isLoading="getLoading"
-        >{{statusModal === 'add' ? 'Add' : 'Update'}}</MainButton>
+        >{{statusModal === 'add' ? 'Add' : 'Update'}}</g-button>
       </div>
       {{statusHideModal ? hideModal() : ''}}
     </form>
@@ -113,14 +103,12 @@
 </template>
 
 <script>
+import mixins from '@/components/mixins/swal'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import MainButton from '@/components/ui/MainButton'
 
 export default {
   name: 'ModalUsers',
-  components: {
-    MainButton
-  },
+  mixins: [mixins],
   data() {
     return {
       genders: [
@@ -141,6 +129,10 @@ export default {
         {
           val: '2',
           name: 'Cashier'
+        },
+        {
+          val: '3',
+          name: 'Member'
         }
       ],
       password: '',
@@ -169,12 +161,12 @@ export default {
       }
       this.actAddUser(data)
         .then((response) => {
-          this.$toast.success('Data successfully added')
+          this.toastSuccess('Data successfully added')
           this.hideModal()
           this.clearPassword()
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
         })
@@ -192,12 +184,12 @@ export default {
       formData.append('status', this.modalDataUser.status)
       this.actUpdateUser({ data: formData, id: this.modalDataUser.id })
         .then((response) => {
-          this.$toast.success('Data successfully updated')
+          this.toastSuccess('Data successfully updated')
           this.hideModal()
           this.fileImage = ''
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
         })
@@ -219,5 +211,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.form-shadow {
+  border: 0;
+  box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
 </style>

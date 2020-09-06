@@ -3,7 +3,7 @@
     <div class="row" id="navbar">
       <div
         class="px-0 fixed-top"
-        :class="currentRouteName === 'Home' ? 'col-lg-8 col-md-8 col-sm-12' : 'col-md-12'"
+        :class="currentRouteName === 'Home' && roleId !== 3 ? 'col-lg-8 col-md-8 col-sm-12' : 'col-md-12'"
       >
         <div class="navbar-left border-right">
           <button
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div
-          v-if="currentRouteName === 'Home'"
+          v-if="currentRouteName === 'Home' && roleId !== 3"
           class="col-lg-4 col-md-4 col-sm-12 px-0 fixed-top"
           id="navbar-right"
         >
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import ModalCartMobile from '@/components/ModalCartMobile'
+import ModalCartMobile from '@/components/molecules/ModalCartMobile'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Navbar',
@@ -101,6 +101,7 @@ export default {
   computed: {
     ...mapState('product', ['showSearch']),
     ...mapGetters('cart', ['countTotalCart']),
+    ...mapState('auth', ['roleId']),
     currentRouteName() {
       return this.$route.name
     }

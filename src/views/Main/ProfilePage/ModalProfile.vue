@@ -2,31 +2,28 @@
   <b-modal id="modal-primary" ref="modal-primary" hide-footer :title="'Update ' +whatModal">
     <form @submit.prevent="whatModal === 'profile' ? onUpdateProfile() : onUpdatePassword()">
       <div v-if="whatModal === 'profile'">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Name</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control form-shadow" v-model="user.name" />
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Email</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control form-shadow" v-model="user.email" readonly />
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Gender</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control form-shadow" v-model="getGender" readonly />
-          </div>
-        </div>
+        <g-form-group label="Name" refInp="name" :isRow="true" v-model="user.name" />
+        <g-form-group
+          label="Email"
+          refInp="email"
+          :isRow="true"
+          v-model="user.email"
+          :disabled="true"
+        />
+        <g-form-group
+          label="Gender"
+          refInp="gender"
+          :isRow="true"
+          v-model="getGender"
+          :disabled="true"
+        />
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Image</label>
           <div class="col-sm-10">
-            <b-form-group class="form-shadow mb-0" label-for="file-default">
+            <b-form-group class="mb-0" label-for="file-default">
               <input
                 type="file"
-                class="form-control"
+                class="form-control form-shadow"
                 id="image"
                 ref="image"
                 @change="handleFileUpload()"
@@ -43,18 +40,24 @@
         </div>
       </div>
       <div v-if="whatModal === 'password'">
-        <div class="form-group">
-          <label>Old Password</label>
-          <input type="password" v-model="oldPassword" class="form-control" />
-        </div>
-        <div class="form-group">
-          <label>New Password</label>
-          <input type="password" class="form-control" v-model="newPassword" />
-        </div>
-        <div class="form-group">
-          <label>Verification New Password</label>
-          <input type="password" class="form-control" v-model="verifyNewPassword" />
-        </div>
+        <g-form-group
+          type="password"
+          label="Old Password"
+          refInp="oldPassword"
+          v-model="oldPassword"
+        />
+        <g-form-group
+          type="password"
+          label="New Password"
+          refInp="newPassword"
+          v-model="newPassword"
+        />
+        <g-form-group
+          type="password"
+          label="Verification New Password"
+          refInp="verificationNewPassword"
+          v-model="verifyNewPassword"
+        />
       </div>
       <div class="modal-footer border-top-0">
         <button
@@ -63,26 +66,20 @@
           class="btn btn-one px-4 rounded-xs"
           data-dismiss="modal"
         >Cancel</button>
-        <MainButton
-          type="submit"
-          customClass="btn-two px-4 rounded-xs"
-          :isLoading="getLoading"
-        >Update</MainButton>
+        <g-button type="submit" cusClass="btn-two px-4 rounded-xs" :isLoading="getLoading">Update</g-button>
       </div>
     </form>
   </b-modal>
 </template>
 
 <script>
+import mixins from '@/components/mixins/swal'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import MainButton from '@/components/ui/MainButton'
 
 export default {
   name: 'ModalProfile',
   props: ['whatModal'],
-  components: {
-    MainButton
-  },
+  mixins: [mixins],
   data() {
     return {
       fileImage: '',
@@ -107,12 +104,12 @@ export default {
       formData.append('oldImage', this.user.image)
       this.updateProfile({ data: formData, id: this.user.id })
         .then((response) => {
-          this.$toast.success('Profile updated')
+          this.toastSuccess('Profile updated')
           this.hideModal()
           this.clearState()
         })
         .catch((err) => {
-          this.$toast.error(
+          this.toastError(
             err.data.error.sqlMessage
               ? err.data.error.sqlMessage
               : err.data.error.join(', ')
@@ -135,10 +132,10 @@ export default {
         .then((response) => {
           this.clearState()
           this.hideModal()
-          this.$toast.info('Password successfully updated')
+          this.toastSuccess('Password successfully updated')
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
         })
@@ -155,5 +152,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.form-shadow {
+  border: 0;
+  box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
 </style>

@@ -8,10 +8,13 @@ import Main from '../views/Main/index.vue'
 import Landing from '../views/Landing/index.vue'
 import Auth from '../views/Auth'
 import Login from '../views/Auth/LoginPage'
+import VerifyAccount from '../views/Auth/LoginPage/VerifyAccount.vue'
 import Register from '../views/Auth/RegistrationPage'
 import Profile from '../views/Main/ProfilePage'
 import Users from '../views/Main/UsersPage'
 import store from '../store'
+import NotFound from '../views/404.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -42,7 +45,13 @@ const routes = [
         path: 'register',
         name: 'Register',
         component: Register
+      },
+      {
+        path: 'login/verify-account',
+        name: 'VerifyAccount',
+        component: VerifyAccount
       }
+
     ]
   },
   {
@@ -65,7 +74,10 @@ const routes = [
       {
         path: 'history',
         name: 'History',
-        component: History
+        component: History,
+        meta: {
+          requiresAdminCashier: true
+        }
       },
       {
         path: 'product',
@@ -97,6 +109,16 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/404',
+    component: NotFound,
+    name: 'PageNotFound'
+  }, {
+    path: '*',
+    redirect: {
+      name: 'PageNotFound'
+    }
   }
 ]
 
@@ -108,8 +130,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
     if (!store.getters['auth/isLogin']) {
       next({
         path: '/auth/login'
@@ -127,12 +147,36 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     next()
-    // make sure to always call next()!
   }
 })
 router.beforeEach((to, from, next) => {
+  let roleId
+  if (localStorage.getItem('data-hour')) {
+    roleId = Vue.CryptoJS.AES.decrypt(localStorage.getItem('data-hour'), process.env.VUE_APP_SECRET_KEY).toString(Vue.CryptoJS.enc.Utf8)
+  } else {
+    roleId = 0
+  }
   if (to.matched.some(record => record.meta.requiresAdmin)) {
-    if (localStorage.getItem('roleId') === '2') {
+    if (roleId === '2') {
+      next({
+        path: '/demo'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
+router.beforeEach((to, from, next) => {
+  let roleId
+  if (localStorage.getItem('data-hour')) {
+    roleId = Vue.CryptoJS.AES.decrypt(localStorage.getItem('data-hour'), process.env.VUE_APP_SECRET_KEY).toString(Vue.CryptoJS.enc.Utf8)
+  } else {
+    roleId = 0
+  }
+  if (to.matched.some(record => record.meta.requiresAdminCashier)) {
+    if (roleId === '3') {
       next({
         path: '/demo'
       })

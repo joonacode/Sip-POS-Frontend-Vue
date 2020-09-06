@@ -1,81 +1,97 @@
 <template>
-  <AuthCard>
-    <template #header>Register</template>
-    <template #form>
-      <form @submit.prevent="register">
-        <div class="form-group">
-          <input type="text" placeholder="Full Name" class="form-control" v-model="name" />
+  <div class="col-md-7 my-5" style="padding: 20px 60px 20px 60px;">
+    <h2 class="mb-3 font-weight-bold text-dark">
+      Register
+      <b-icon icon="shield-lock" />
+    </h2>
+    <small class="mb-4 d-inline-block">Welcome please register to create account</small>
+    <form @submit.prevent="register">
+      <div class="row">
+        <div class="col-md-6">
+          <label for>Full Name</label>
+          <div class="form-group">
+            <input type="text" class="form-control" v-model="name" />
+          </div>
+          <div class="form-group">
+            <label for>Email</label>
+            <input
+              type="text"
+              @keyup="checkEmail"
+              :class="[email.length > 2 ? statusEmail : '']"
+              class="form-control"
+              v-model="email"
+            />
+            <div class="invalid-feedback">{{messageEmail}}</div>
+          </div>
+          <div class="form-group">
+            <label for>Gender</label>
+            <select class="form-control" v-model="gender">
+              <option value selected disabled></option>
+              <option value="m">Male</option>
+              <option value="f">Female</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group">
-          <input
-            type="text"
-            @keyup="checkEmail"
-            :class="[email.length > 2 ? statusEmail : '']"
-            placeholder="Email"
-            class="form-control"
-            v-model="email"
-          />
-          <div class="invalid-feedback">{{messageEmail}}</div>
+        <div class="col-md-6">
+          <div class="form-group" v-if="setting.showRole">
+            <label for>Role</label>
+            <select class="form-control" v-model="roleId">
+              <option value selected disabled></option>
+              <option value="3">User</option>
+              <option value="2">Cashier</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for>Password</label>
+            <input
+              type="password"
+              class="form-control"
+              :class="[password.length > 2 ? statusPassword : '']"
+              @keyup="checkPassword"
+              v-model="password"
+            />
+          </div>
+          <div class="form-group">
+            <label for>Repaeat Password</label>
+            <input
+              type="password"
+              :class="[passwordVerification.length > 2 ? statusPassword : '']"
+              @keyup="checkPassword"
+              class="form-control"
+              v-model="passwordVerification"
+            />
+            <div class="invalid-feedback">{{messagePassword}}</div>
+            <div class="valid-feedback">{{messagePassword}}</div>
+          </div>
         </div>
-        <div class="form-group">
-          <select class="form-control" v-model="gender">
-            <option value selected disabled>Select Gender</option>
-            <option value="m">Male</option>
-            <option value="f">Female</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            class="form-control"
-            :class="[password.length > 2 ? statusPassword : '']"
-            @keyup="checkPassword"
-            v-model="password"
-          />
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            :class="[passwordVerification.length > 2 ? statusPassword : '']"
-            @keyup="checkPassword"
-            placeholder="Repeat Password"
-            class="form-control"
-            v-model="passwordVerification"
-          />
-          <div class="invalid-feedback">{{messagePassword}}</div>
-          <div class="valid-feedback">{{messagePassword}}</div>
-        </div>
-        <MainButton
+        <g-button
           :disabled="checkSubmit"
           type="sumbit"
           :isLoading="getLoading"
-          variant="primary"
-        >Login</MainButton>
-      </form>
-    </template>
-    <template #footer>
+          variant="secondary"
+          cusClass="btn-block my-3 shadow"
+        >Register</g-button>
+      </div>
+    </form>
+    <span>
       Already have account?
       <router-link :to="{name: 'Login'}">login here</router-link>
-    </template>
-  </AuthCard>
+    </span>
+  </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import MainButton from '@/components/ui/MainButton'
-import AuthCard from '@/components/AuthCard'
+import mixins from '@/components/mixins/swal'
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   name: 'Register',
-  components: {
-    AuthCard,
-    MainButton
-  },
+  mixins: [mixins],
   data() {
     return {
       name: '',
       email: '',
       gender: '',
+      roleId: '',
       password: '',
       passwordVerification: '',
       statusPassword: '',
@@ -92,16 +108,22 @@ export default {
         name: this.name,
         email: this.email,
         gender: this.gender,
+        roleId: this.roleId,
         password: this.password,
         passwordVerification: this.passwordVerification
+      }
+      if (!this.setting.showRole) {
+        newUser.roleId = '3'
       }
       this.registerUser(newUser)
         .then((response) => {
           this.$router.push({ name: 'Login' })
-          this.$toast.success('Registration success, please login')
+          this.toastSuccess(
+            'Registration success, please check your email to activate account'
+          )
         })
         .catch(({ error }) => {
-          this.$toast.error(
+          this.toastError(
             error.sqlMessage ? error.sqlMessage : error.join(', ')
           )
         })
@@ -135,6 +157,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getLoading']),
+    ...mapState(['setting']),
     checkSubmit() {
       if (
         this.name &&
@@ -151,6 +174,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

@@ -5,26 +5,16 @@
     hide-footer
     :title="statusModal === 'add' ? 'Add item' : 'Update item'"
   >
-    <form @submit="addCategory">
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control form-shadow" v-model="category.name" />
-          <input type="hidden" v-model="category.id" />
-        </div>
-      </div>
+    <form @submit.prevent="statusModal === 'add' ? addCategory() : updateCategory()">
+      <input type="hidden" v-model="category.id" />
+      <g-form-group label="Name" refInp="name" :isRow="true" v-model="category.name" />
       <div class="modal-footer border-top-0">
-        <button
-          type="button"
-          @click="hideModal"
-          class="btn btn-one px-4 rounded-xs"
-          data-dismiss="modal"
-        >Cancel</button>
-        <MainButton
+        <g-button @cus-click="hideModal" cusClass="btn-one px-4 rounded-xs">Cancel</g-button>
+        <g-button
           type="submit"
-          customClass="btn-two px-4 rounded-xs"
           :isLoading="getLoading"
-        >{{statusModal === 'add' ? 'Add' : 'Update'}}</MainButton>
+          cusClass="btn-two px-4 rounded-xs"
+        >{{statusModal === 'add' ? 'Add' : 'Update'}}</g-button>
       </div>
       {{statusHideModal ? hideModal() : ''}}
     </form>
@@ -32,14 +22,12 @@
 </template>
 
 <script>
+import mixins from '@/components/mixins/swal'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import MainButton from '@/components/ui/MainButton'
 
 export default {
   name: 'ModalCategory',
-  components: {
-    MainButton
-  },
+  mixins: [mixins],
   methods: {
     ...mapActions(['changeStatusHideModal']),
     ...mapActions('category', [
@@ -47,29 +35,27 @@ export default {
       'postCategory',
       'patchCategory'
     ]),
-    addCategory(e) {
-      e.preventDefault()
-      if (this.statusModal === 'add') {
-        this.postCategory({ name: this.category.name })
-          .then((response) => {
-            this.$toast.success('Category successfully added')
-          })
-          .catch(({ error }) => {
-            this.$toast.error(
-              error.sqlMessage ? error.sqlMessage : error.join(', ')
-            )
-          })
-      } else {
-        this.patchCategory({ name: this.category.name, id: this.category.id })
-          .then((response) => {
-            this.$toast.success('Category successfully updated')
-          })
-          .catch(({ error }) => {
-            this.$toast.error(
-              error.sqlMessage ? error.sqlMessage : error.join(', ')
-            )
-          })
-      }
+    addCategory() {
+      this.postCategory({ name: this.category.name })
+        .then((response) => {
+          this.toastSuccess('Category successfully added')
+        })
+        .catch(({ error }) => {
+          this.toastError(
+            error.sqlMessage ? error.sqlMessage : error.join(', ')
+          )
+        })
+    },
+    updateCategory() {
+      this.patchCategory({ name: this.category.name, id: this.category.id })
+        .then((response) => {
+          this.toastSuccess('Category successfully updated')
+        })
+        .catch(({ error }) => {
+          this.toastError(
+            error.sqlMessage ? error.sqlMessage : error.join(', ')
+          )
+        })
     },
     hideModal() {
       this.$refs['modal-category'].hide()

@@ -9,6 +9,9 @@ export default {
   detail(id) {
     return Api.get(`${END_POINT}/${id}`)
   },
+  member() {
+    return Api.get(`${END_POINT}/member`)
+  },
   updateProfile(data, id) {
     return Api.patch(`${END_POINT}/profile/${id}`, data, {
       headers: {

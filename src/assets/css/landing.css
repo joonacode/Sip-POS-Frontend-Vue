@@ -81,7 +81,7 @@ body {
 }
 
 .round-hide {
-  background-color: #fafafa;
+  background-color: #fff;
   border-radius: 100px;
   color: white;
   margin-top: -28px;
@@ -110,7 +110,7 @@ body {
 
 .pricing {
   border-radius: 20px !important;
-  background-color: #f9f9f9 !important;
+  background-color: #fafafa !important;
 }
 
 .list-plans {
