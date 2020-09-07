@@ -38,6 +38,11 @@ const actions = {
     commit
   }, carts) {
     commit('SET_CARTS', carts)
+  },
+  clearCartsWhenLogout({
+    commit
+  }) {
+    commit('CLEAR_CARTS_WHEN_LOGOUT')
   }
 
 }
@@ -89,6 +94,10 @@ const mutations = {
 
   CLEAR_CART: (state) => {
     message.toastSuccess('Cart has been cleaned')
+    state.carts = []
+  },
+
+  CLEAR_CARTS_WHEN_LOGOUT: (state) => {
     state.carts = []
   },
 

@@ -98,9 +98,13 @@ const actions = {
   },
 
   logoutUser({
-    commit
+    commit,
+    dispatch
   }) {
     commit('LOGOUT_USER')
+    dispatch('cart/clearCartsWhenLogout', null, {
+      root: true
+    })
   },
 
   interceptorsRequest({
@@ -169,7 +173,7 @@ const actions = {
             dispatch('interceptorsRequest')
           })
         dispatch('interceptorsRequest')
-        Vue.$toast.error('Your session is expired refresh the browser or navigate to another page for update the session', {
+        Vue.$toast.error('Your session is expired refresh the browser or logout', {
             duration: 5000
           })
           .catch(err => {

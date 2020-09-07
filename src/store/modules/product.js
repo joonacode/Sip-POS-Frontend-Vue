@@ -110,6 +110,7 @@ const actions = {
           dispatch('changeIsLoading', false, {
             root: true
           })
+          console.log(err.response)
           reject(err.response.data)
         })
     })

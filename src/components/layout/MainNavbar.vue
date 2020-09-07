@@ -18,7 +18,7 @@
           >{{currentRouteName === 'Home' ? 'Food Items' : currentRouteName}}</div>
           <div>
             <button
-              v-if="currentRouteName === 'Home'"
+              v-if="currentRouteName === 'Home' && roleId !== 3"
               v-b-modal.modal-cart-mobile
               class="btn py-0 position-relative"
               id="modal-cart"
