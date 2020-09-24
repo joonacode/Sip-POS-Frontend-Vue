@@ -8,14 +8,14 @@
 
   <p align="center">
     <br />
-    <a href="https://github.com/AdmiralYuuShi/Frontend-HiringChannelApp-WithRedux"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/joonacode/Sip-POS-Frontend-Vue"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="http://sippos.fwdev.online/">View Demo</a>
     ·
-    <a href="https://github.com/AdmiralYuuShi/Frontend-HiringChannelApp-WithRedux/issues">Report Bug</a>
+    <a href="https://github.com/joonacode/Sip-POS-Frontend-Vue/issues">Report Bug</a>
     ·
-    <a href="https://github.com/AdmiralYuuShi/Frontend-HiringChannelApp-WithRedux/issues">Request Feature</a>
+    <a href="https://github.com/joonacode/Sip-POS-Frontend-Vue/issues">Request Feature</a>
   </p>
 </p>
 
