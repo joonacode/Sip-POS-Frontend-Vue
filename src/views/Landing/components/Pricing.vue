@@ -14,19 +14,31 @@
             </template>
             <template #list>
               <div class="plan-item">
-                <img :src="require('@/assets/images/landing/check.svg')" alt="check" />
+                <img
+                  :src="require('@/assets/images/landing/check.svg')"
+                  alt="check"
+                />
                 Termasuk semua halaman
               </div>
               <div class="plan-item">
-                <img :src="require('@/assets/images/landing/check.svg')" alt="check" />
+                <img
+                  :src="require('@/assets/images/landing/check.svg')"
+                  alt="check"
+                />
                 Mempunyai tampilan responsive
               </div>
               <div class="plan-item x">
-                <img :src="require('@/assets/images/landing/times.svg')" alt="times" />
+                <img
+                  :src="require('@/assets/images/landing/times.svg')"
+                  alt="times"
+                />
                 Versi terbaru
               </div>
               <div class="plan-item x">
-                <img :src="require('@/assets/images/landing/times.svg')" alt="times" />
+                <img
+                  :src="require('@/assets/images/landing/times.svg')"
+                  alt="times"
+                />
                 Mendapatkan pembaruan secara gratis
               </div>
             </template>
@@ -48,24 +60,36 @@
           <PricingCard :isPro="true" discount="-90%">
             <template #header>
               <h4 class="font-weight-bold">Sip POS Pro</h4>
-              <span style="text-decoration: line-through;">Rp. 1.000.000</span> /
+              <span style="text-decoration: line-through">Rp. 1.000.000</span> /
               <span>Rp. 10.000</span>
             </template>
             <template #list>
               <div class="plan-item">
-                <img :src="require('@/assets/images/landing/check.svg')" alt="check" />
+                <img
+                  :src="require('@/assets/images/landing/check.svg')"
+                  alt="check"
+                />
                 Termasuk semua halaman
               </div>
               <div class="plan-item">
-                <img :src="require('@/assets/images/landing/check.svg')" alt="check" />
+                <img
+                  :src="require('@/assets/images/landing/check.svg')"
+                  alt="check"
+                />
                 Mempunyai tampilan responsive
               </div>
               <div class="plan-item">
-                <img :src="require('@/assets/images/landing/check.svg')" alt="check" />
+                <img
+                  :src="require('@/assets/images/landing/check.svg')"
+                  alt="check"
+                />
                 Versi terbaru
               </div>
               <div class="plan-item">
-                <img :src="require('@/assets/images/landing/check.svg')" alt="check" />
+                <img
+                  :src="require('@/assets/images/landing/check.svg')"
+                  alt="check"
+                />
                 Dapat pembaruan aplikasi
               </div>
             </template>
@@ -87,12 +111,14 @@
           <div class="col-md-12 text-center mt-4">
             <p class="text-center">Atau</p>
             <router-link
-              :to="{name: 'Home'}"
-              target="_blank"
+              :to="{ name: 'Login' }"
               class="btn btn-dark mt-3 shadow-sm px-5 py-2 ml-3"
             >
               Coba Demo
-              <img :src="require('@/assets/images/landing/play.svg')" alt="play" />
+              <img
+                :src="require('@/assets/images/landing/play.svg')"
+                alt="play"
+              />
             </router-link>
           </div>
         </div>

@@ -10,9 +10,10 @@
               Simple and Elegan
               <br />Point Of Sales Application
             </h1>
-            <p
-              class="header-desc"
-            >Sip POS merupakan aplikasi point of sales dengan harga murah dengan fitur melimpah.</p>
+            <p class="header-desc">
+              Sip POS merupakan aplikasi point of sales dengan harga murah
+              dengan fitur melimpah.
+            </p>
             <a href="#why" class="btn shadow btn-primary btn-header mt-2 px-5">
               Kenapa Sip POS
               <svg
@@ -34,8 +35,7 @@
               </svg>
             </a>
             <router-link
-              :to="{name: 'Home'}"
-              target="_blank"
+              :to="{ name: 'Login' }"
               class="btn shadow btn-header btn-info mt-2 px-5 ml-3"
             >
               Coba Demo

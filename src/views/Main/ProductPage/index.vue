@@ -3,7 +3,11 @@
     <div class="main-left mb-5">
       <div class="row">
         <b-col md="12">
-          <g-card @add-modal="addModal" @refresh-body="refreshProduct" title="Product">
+          <g-card
+            @add-modal="addModal"
+            @refresh-body="refreshProduct"
+            title="Product"
+          >
             <template #cardBody>
               <TableProduct :products="allProductsNoPaging" />
             </template>

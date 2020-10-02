@@ -1,10 +1,12 @@
 <template>
-  <div class="col-md-7 my-5" style="padding: 20px 60px 20px 60px;">
+  <div class="col-md-7 my-5" style="padding: 20px 60px 20px 60px">
     <h2 class="mb-3 font-weight-bold text-dark">
       Register
       <b-icon icon="shield-lock" />
     </h2>
-    <small class="mb-4 d-inline-block">Welcome please register to create account</small>
+    <small class="mb-4 d-inline-block"
+      >Welcome please register to create account</small
+    >
     <form @submit.prevent="register">
       <div class="row">
         <div class="col-md-6">
@@ -21,7 +23,7 @@
               class="form-control"
               v-model="email"
             />
-            <div class="invalid-feedback">{{messageEmail}}</div>
+            <div class="invalid-feedback">{{ messageEmail }}</div>
           </div>
           <div class="form-group">
             <label for>Gender</label>
@@ -52,7 +54,7 @@
             />
           </div>
           <div class="form-group">
-            <label for>Repaeat Password</label>
+            <label for>Confirm Password</label>
             <input
               type="password"
               :class="[passwordVerification.length > 2 ? statusPassword : '']"
@@ -60,8 +62,8 @@
               class="form-control"
               v-model="passwordVerification"
             />
-            <div class="invalid-feedback">{{messagePassword}}</div>
-            <div class="valid-feedback">{{messagePassword}}</div>
+            <div class="invalid-feedback">{{ messagePassword }}</div>
+            <div class="valid-feedback">{{ messagePassword }}</div>
           </div>
         </div>
         <g-button
@@ -70,12 +72,15 @@
           :isLoading="getLoading"
           variant="secondary"
           cusClass="btn-block my-3 shadow"
-        >Register</g-button>
+          >Register</g-button
+        >
       </div>
     </form>
     <span>
       Already have account?
-      <router-link :to="{name: 'Login'}">login here</router-link>
+      <router-link :to="{ name: 'Login' }" class="text-decoration-none"
+        >login here</router-link
+      >
     </span>
   </div>
 </template>

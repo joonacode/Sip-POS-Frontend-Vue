@@ -1,8 +1,22 @@
 <template>
-  <b-modal id="modal-primary" ref="modal-primary" hide-footer :title="'Update ' +whatModal">
-    <form @submit.prevent="whatModal === 'profile' ? onUpdateProfile() : onUpdatePassword()">
+  <b-modal
+    id="modal-primary"
+    ref="modal-primary"
+    hide-footer
+    :title="'Update ' + whatModal"
+  >
+    <form
+      @submit.prevent="
+        whatModal === 'profile' ? onUpdateProfile() : onUpdatePassword()
+      "
+    >
       <div v-if="whatModal === 'profile'">
-        <g-form-group label="Name" refInp="name" :isRow="true" v-model="user.name" />
+        <g-form-group
+          label="Name"
+          refInp="name"
+          :isRow="true"
+          v-model="user.name"
+        />
         <g-form-group
           label="Email"
           refInp="email"
@@ -21,21 +35,30 @@
           <label class="col-sm-2 col-form-label">Image</label>
           <div class="col-sm-10">
             <b-form-group class="mb-0" label-for="file-default">
-              <input
-                type="file"
-                class="form-control form-shadow"
-                id="image"
-                ref="image"
-                @change="handleFileUpload()"
-              />
+              <b-form-file
+                class="form-shadow border-0"
+                accept="image/jpeg, image/png, image/jpg"
+                v-model="fileImage"
+                :state="Boolean(fileImage)"
+                placeholder="Choose a file or drop it here..."
+                drop-placeholder="Drop file here..."
+              ></b-form-file>
             </b-form-group>
             <input type="hidden" v-model="user.image" />
           </div>
         </div>
-        <div class="form-group row" v-if="user.image !== 'null' && user.image !== null">
+        <div
+          class="form-group row"
+          v-if="user.image !== 'null' && user.image !== null"
+        >
           <label class="col-sm-2 col-form-label">Old Image</label>
           <div class="col-sm-10">
-            <img :src="user.image" width="150" class="img-fluid img-thumbnail" alt="image" />
+            <img
+              :src="user.image"
+              width="150"
+              class="img-fluid img-thumbnail"
+              alt="image"
+            />
           </div>
         </div>
       </div>
@@ -65,8 +88,15 @@
           @click="hideModal"
           class="btn btn-one px-4 rounded-xs"
           data-dismiss="modal"
-        >Cancel</button>
-        <g-button type="submit" cusClass="btn-two px-4 rounded-xs" :isLoading="getLoading">Update</g-button>
+        >
+          Cancel
+        </button>
+        <g-button
+          type="submit"
+          cusClass="btn-two px-4 rounded-xs"
+          :isLoading="getLoading"
+          >Update</g-button
+        >
       </div>
     </form>
   </b-modal>
@@ -82,7 +112,7 @@ export default {
   mixins: [mixins],
   data() {
     return {
-      fileImage: '',
+      fileImage: null,
       oldPassword: '',
       newPassword: '',
       verifyNewPassword: ''
@@ -99,6 +129,11 @@ export default {
     onUpdateProfile() {
       // eslint-disable-next-line prefer-const
       let formData = new FormData()
+      if (this.fileImage) {
+        if (this.fileImage.size > 2097152) {
+          return this.toastError('Max file size 2MB')
+        }
+      }
       formData.append('image', this.fileImage)
       formData.append('name', this.user.name)
       formData.append('oldImage', this.user.image)
@@ -117,7 +152,7 @@ export default {
         })
     },
     clearState() {
-      this.fileImage = ''
+      this.fileImage = null
       this.oldPassword = ''
       this.newPassword = ''
       this.verifyNewPassword = ''

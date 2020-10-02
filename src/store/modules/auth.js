@@ -10,7 +10,6 @@ import router from '@/router'
 // state
 const state = {
   token: localStorage.getItem('token') || null,
-  refreshToken: localStorage.getItem('refreshToken') || null,
   idUser: localStorage.getItem('idUser') || null,
   roleId: localStorage.getItem('roleId') || null
 }
@@ -97,6 +96,78 @@ const actions = {
     })
   },
 
+  forgotPassword({
+    commit,
+    dispatch
+  }, data) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      Auth.forgotPassword(data)
+        .then(response => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          resolve(response.data)
+        })
+        .catch(err => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          reject(err.response.data)
+        })
+    })
+  },
+
+  verifyTokenPassword({
+    commit,
+    dispatch
+  }, data) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      Auth.verifyTokenPassword(data)
+        .then(response => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          resolve(response.data)
+        })
+        .catch(err => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          reject(err.response.data)
+        })
+    })
+  },
+
+  resetPassword({
+    commit,
+    dispatch
+  }, data) {
+    dispatch('changeIsLoading', true, {
+      root: true
+    })
+    return new Promise((resolve, reject) => {
+      Auth.resetPassword(data)
+        .then(response => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          resolve(response.data)
+        })
+        .catch(err => {
+          dispatch('changeIsLoading', false, {
+            root: true
+          })
+          reject(err.response.data)
+        })
+    })
+  },
+
   logoutUser({
     commit,
     dispatch
@@ -155,30 +226,11 @@ const actions = {
           name: 'Login'
         })
       } else if (error === 'Token expired' && status_code === 401) {
-        const tokenUser = {
-          id: state.idUser,
-          roleId: Number(state.roleId),
-          refreshToken: state.refreshToken
-        }
-        Auth.refreshToken(tokenUser)
-          .then(response => {
-            const {
-              token,
-              refreshToken
-            } = response.data.results
-            state.token = token
-            state.refreshToken = refreshToken
-            localStorage.setItem('token', token)
-            localStorage.setItem('refreshToken', refreshToken)
-            dispatch('interceptorsRequest')
-          })
-        dispatch('interceptorsRequest')
-        Vue.$toast.error('Your session is expired refresh the browser or logout', {
-            duration: 5000
-          })
-          .catch(err => {
-            console.log(err.response)
-          })
+        Vue.$toast.error('Your session is expired refresh the browser or logout')
+        dispatch('logoutUser')
+        router.push({
+          name: 'Login'
+        })
       } else if (error === 'Only admins can access' && status_code === 403) {
         Vue.$toast.error('Opps... You not have permission!')
         router.push({
@@ -195,7 +247,6 @@ const mutations = {
   LOGIN_USER: (state, data) => {
     const {
       token,
-      refreshToken,
       id,
       roleId
     } = data.results
@@ -203,13 +254,11 @@ const mutations = {
     const encryptedRoleId = Vue.CryptoJS.AES.encrypt(roleId.toString(), process.env.VUE_APP_SECRET_KEY).toString()
 
     localStorage.setItem('token', token)
-    localStorage.setItem('refreshToken', refreshToken)
     localStorage.setItem('data-time', encryptedId)
     localStorage.setItem('data-hour', encryptedRoleId)
     state.idUser = id
     state.token = token
     state.roleId = roleId
-    state.refreshToken = refreshToken
   },
 
   LOGOUT_USER: state => {
@@ -217,7 +266,6 @@ const mutations = {
     state.idUser = {}
     state.token = null
     state.roleId = null
-    state.refreshToken = null
   }
 }
 

@@ -8,8 +8,18 @@
     <form @submit.prevent="statusModal === 'add' ? addUser() : updateUser()">
       <input type="hidden" v-model="modalDataUser.id" />
       <input type="hidden" v-model="modalDataUser.oldEmail" />
-      <g-form-group label="Name" refInp="name" :isRow="true" v-model="modalDataUser.name" />
-      <g-form-group label="Email" refInp="email" :isRow="true" v-model="modalDataUser.email" />
+      <g-form-group
+        label="Name"
+        refInp="name"
+        :isRow="true"
+        v-model="modalDataUser.name"
+      />
+      <g-form-group
+        label="Email"
+        refInp="email"
+        :isRow="true"
+        v-model="modalDataUser.email"
+      />
       <g-form-group-select
         label="Gender"
         refInp="gender"
@@ -22,16 +32,25 @@
           :selected="modalDataUser.gender === gender.val"
           :value="gender.val"
           :key="i"
-        >{{gender.name}}</option>
+        >
+          {{ gender.name }}
+        </option>
       </g-form-group-select>
-      <g-form-group-select label="Role" refInp="role" :isRow="true" v-model="modalDataUser.roleId">
+      <g-form-group-select
+        label="Role"
+        refInp="role"
+        :isRow="true"
+        v-model="modalDataUser.roleId"
+      >
         <option value selected disabled>Select Role</option>
         <option
           v-for="(role, i) in roles"
           :selected="modalDataUser.roleId === Number(role.val)"
           :value="role.val"
           :key="i"
-        >{{role.name}}</option>
+        >
+          {{ role.name }}
+        </option>
       </g-form-group-select>
       <g-form-group-select
         label="Status"
@@ -41,8 +60,12 @@
       >
         <option value selected disabled>Select Status</option>
         <option value="1" :selected="modalDataUser.status === 1">Active</option>
-        <option value="2" :selected="modalDataUser.status === 2">Non Active</option>
-        <option value="0" :selected="modalDataUser.status === 0">Disable</option>
+        <option value="2" :selected="modalDataUser.status === 2">
+          Non Active
+        </option>
+        <option value="0" :selected="modalDataUser.status === 0">
+          Disable
+        </option>
       </g-form-group-select>
       <g-form-group
         type="password"
@@ -63,25 +86,33 @@
       <div class="form-group row" v-if="statusModal !== 'add'">
         <label class="col-sm-2 col-form-label">Image</label>
         <div class="col-sm-10">
-          <b-form-group class="mb-0" label-for="file-default">
-            <input
-              type="file"
-              class="form-control form-shadow"
-              id="image"
-              ref="image"
-              @change="handleFileUpload()"
-            />
-          </b-form-group>
+          <b-form-file
+            class="form-shadow border-0"
+            accept="image/jpeg, image/png, image/jpg"
+            v-model="fileImage"
+            :state="Boolean(fileImage)"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+          ></b-form-file>
           <input type="hidden" v-model="modalDataUser.image" />
         </div>
       </div>
       <div
         class="form-group row"
-        v-if="statusModal !== 'add' && modalDataUser.image && modalDataUser.image !== 'null'"
+        v-if="
+          statusModal !== 'add' &&
+          modalDataUser.image &&
+          modalDataUser.image !== 'null'
+        "
       >
         <label class="col-sm-2 col-form-label">Old Image</label>
         <div class="col-sm-10">
-          <img :src="modalDataUser.image" width="150" class="img-fluid img-thumbnail" alt="image" />
+          <img
+            :src="modalDataUser.image"
+            width="150"
+            class="img-fluid img-thumbnail"
+            alt="image"
+          />
         </div>
       </div>
       <div class="modal-footer border-top-0">
@@ -90,14 +121,17 @@
           @click="hideModal"
           class="btn btn-one px-4 rounded-xs"
           data-dismiss="modal"
-        >Cancel</button>
+        >
+          Cancel
+        </button>
         <g-button
           type="submit"
           cusClass="btn-two px-4 rounded-xs"
           :isLoading="getLoading"
-        >{{statusModal === 'add' ? 'Add' : 'Update'}}</g-button>
+          >{{ statusModal === 'add' ? 'Add' : 'Update' }}</g-button
+        >
       </div>
-      {{statusHideModal ? hideModal() : ''}}
+      {{ statusHideModal ? hideModal() : '' }}
     </form>
   </b-modal>
 </template>
@@ -137,7 +171,7 @@ export default {
       ],
       password: '',
       passwordVerification: '',
-      fileImage: ''
+      fileImage: null
     }
   },
   methods: {
@@ -174,6 +208,11 @@ export default {
     updateUser() {
       // eslint-disable-next-line prefer-const
       let formData = new FormData()
+      if (this.fileImage) {
+        if (this.fileImage.size > 2097152) {
+          return this.toastError('Max file size 2MB')
+        }
+      }
       formData.append('image', this.fileImage)
       formData.append('oldImage', this.modalDataUser.image)
       formData.append('name', this.modalDataUser.name)
@@ -186,7 +225,7 @@ export default {
         .then((response) => {
           this.toastSuccess('Data successfully updated')
           this.hideModal()
-          this.fileImage = ''
+          this.fileImage = null
         })
         .catch(({ error }) => {
           this.toastError(

@@ -9,10 +9,16 @@ export default {
   login(data) {
     return Api.post(`${BASE_URL}/login`, data)
   },
-  refreshToken(data) {
-    return Api.post(`${BASE_URL}/refresh-token`, data)
-  },
   verifyAccount(token) {
     return Api.post(`${BASE_URL}/verify-account`, token)
+  },
+  forgotPassword(data) {
+    return Api.post(`${BASE_URL}/forgot-password`, data)
+  },
+  verifyTokenPassword(data) {
+    return Api.post(`${BASE_URL}/verify-token-password`, data)
+  },
+  resetPassword(data) {
+    return Api.post(`${BASE_URL}/reset-password`, data)
   }
 }

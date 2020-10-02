@@ -8,6 +8,8 @@ import Main from '../views/Main/index.vue'
 import Landing from '../views/Landing/index.vue'
 import Auth from '../views/Auth'
 import Login from '../views/Auth/LoginPage'
+import ForgotPassword from '../views/Auth/ForgotPasswordPage'
+import ResetPassword from '../views/Auth/ResetPasswordPage'
 import VerifyAccount from '../views/Auth/LoginPage/VerifyAccount.vue'
 import Register from '../views/Auth/RegistrationPage'
 import Profile from '../views/Main/ProfilePage'
@@ -45,6 +47,16 @@ const routes = [
         path: 'register',
         name: 'Register',
         component: Register
+      },
+      {
+        path: 'forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword
+      },
+      {
+        path: 'reset-password',
+        name: 'ResetPassword',
+        component: ResetPassword
       },
       {
         path: 'login/verify-account',
@@ -157,7 +169,7 @@ router.beforeEach((to, from, next) => {
     roleId = 0
   }
   if (to.matched.some(record => record.meta.requiresAdmin)) {
-    if (roleId === '2') {
+    if (roleId === '2' || roleId === '3') {
       next({
         path: '/demo'
       })

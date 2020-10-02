@@ -5,28 +5,39 @@
     hide-footer
     :title="statusModal === 'add' ? 'Add item' : 'Update item'"
   >
-    <form @submit.prevent="statusModal === 'add' ? addProduct() : updateProduct()">
+    <form
+      @submit.prevent="statusModal === 'add' ? addProduct() : updateProduct()"
+    >
       <input type="hidden" v-model="product.id" />
-      <g-form-group label="Name" refInp="name" :isRow="true" v-model="product.name" />
+      <g-form-group
+        label="Name"
+        refInp="name"
+        :isRow="true"
+        v-model="product.name"
+      />
       <input type="hidden" v-model="product.image" />
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Image</label>
         <div class="col-sm-10">
-          <b-form-group class="mb-0" label-for="file-default">
-            <input
-              type="file"
-              class="form-control form-shadow"
-              id="image"
-              ref="image"
-              @change="handleFileUpload()"
-            />
-          </b-form-group>
+          <b-form-file
+            class="form-shadow border-0"
+            accept="image/jpeg, image/png, image/jpg"
+            v-model="fileImage"
+            :state="Boolean(fileImage)"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+          ></b-form-file>
         </div>
       </div>
       <div v-if="statusModal !== 'add'" class="form-group row">
         <label class="col-sm-2 col-form-label">Old Image</label>
         <div class="col-sm-10">
-          <img :src="product.image" width="200" class="img-fluid img-thumbnail" alt="image" />
+          <img
+            :src="product.image"
+            width="200"
+            class="img-fluid img-thumbnail"
+            alt="image"
+          />
         </div>
       </div>
       <g-form-group
@@ -48,18 +59,23 @@
           :selected="product.category === category.id"
           :key="category.id"
           :value="category.id"
-        >{{category.name}}</option>
+        >
+          {{ category.name }}
+        </option>
       </g-form-group-select>
       <div class="modal-footer border-top-0">
-        <g-button @cus-click="hideModal" cusClass="btn-one px-4 rounded-xs">Cancel</g-button>
+        <g-button @cus-click="hideModal" cusClass="btn-one px-4 rounded-xs"
+          >Cancel</g-button
+        >
         <g-button
           type="submit"
           :isLoading="getLoading"
           cusClass="btn-two px-4 rounded-xs"
-        >{{statusModal === 'add' ? 'Add' : 'Update'}}</g-button>
+          >{{ statusModal === 'add' ? 'Add' : 'Update' }}</g-button
+        >
       </div>
     </form>
-    {{statusHideModal ? hideModal() : ''}}
+    {{ statusHideModal ? hideModal() : '' }}
   </b-modal>
 </template>
 
@@ -73,7 +89,7 @@ export default {
   props: ['limit'],
   data() {
     return {
-      fileImage: ''
+      fileImage: null
     }
   },
   methods: {
@@ -86,6 +102,11 @@ export default {
     addProduct() {
       // eslint-disable-next-line prefer-const
       let formData = new FormData()
+      if (this.fileImage) {
+        if (this.fileImage.size > 2097152) {
+          return this.toastError('Max file size 2MB')
+        }
+      }
       formData.append('image', this.fileImage)
       formData.append('name', this.product.name)
       formData.append('price', this.product.price)
