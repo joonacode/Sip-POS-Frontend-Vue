@@ -124,6 +124,11 @@ export default {
     updateProduct() {
       // eslint-disable-next-line prefer-const
       let formData = new FormData()
+      if (this.fileImage) {
+        if (this.fileImage.size > 2097152) {
+          return this.toastError('Max file size 2MB')
+        }
+      }
       formData.append('image', this.fileImage)
       formData.append('oldImage', this.product.image)
       formData.append('name', this.product.name)
